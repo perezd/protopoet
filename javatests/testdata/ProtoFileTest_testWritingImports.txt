@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+import weak "bar.proto";
+import public "foo.proto";
+import "test.proto";
+

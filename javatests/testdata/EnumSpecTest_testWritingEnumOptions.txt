@@ -1,0 +1,7 @@
+// comment
+enum A {
+  // comment
+  option (b) = 12345;
+  // comment
+  option (c) = false;
+}

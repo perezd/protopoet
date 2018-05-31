@@ -1,0 +1,6 @@
+// comment
+message A {
+  string foo = 1;
+  // comment
+  map<string, string> bar = 2;
+}

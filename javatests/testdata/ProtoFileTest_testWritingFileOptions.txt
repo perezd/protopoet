@@ -1,0 +1,8 @@
+// comment
+syntax = "proto3";
+
+// comment
+option (b) = "hello";
+// comment
+option (c) = true;
+

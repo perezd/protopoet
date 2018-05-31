@@ -1,0 +1,9 @@
+// comment
+message A {
+  string foo = 1;
+  oneof B {
+    bool bar = 2;
+    // comment
+    sfixed32 baz = 3;
+  }
+}

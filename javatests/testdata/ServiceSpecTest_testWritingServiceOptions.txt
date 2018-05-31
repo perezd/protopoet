@@ -1,0 +1,7 @@
+// comment
+service A {
+  // comment
+  option (b) = 0.2;
+  // comment
+  option (c) = 2.0;
+}

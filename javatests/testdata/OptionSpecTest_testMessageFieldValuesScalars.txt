@@ -1,0 +1,5 @@
+// comment
+option (foo) = {
+  bar: "hello"
+  baz: true
+};

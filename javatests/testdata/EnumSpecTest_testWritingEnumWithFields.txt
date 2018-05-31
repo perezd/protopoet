@@ -1,0 +1,7 @@
+// comment
+enum A {
+  // field 1
+  A = 1;
+  B = 2;
+  C = 3;
+}

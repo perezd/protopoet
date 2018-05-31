@@ -1,0 +1,11 @@
+// comment
+syntax = "proto3";
+
+package com.testing;
+
+// comment
+service A {
+  // comment
+  rpc B (stream Req) returns (Res);
+}
+

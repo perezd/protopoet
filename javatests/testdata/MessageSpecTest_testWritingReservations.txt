@@ -1,0 +1,6 @@
+// comment
+message A {
+  reserved 1, 2, 3 to 5;
+  // comment
+  reserved "foo", "bar";
+}

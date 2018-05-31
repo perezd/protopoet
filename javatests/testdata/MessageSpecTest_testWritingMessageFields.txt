@@ -1,0 +1,7 @@
+// comment
+message A {
+  bool a = 1;
+  // comment
+  repeated string b = 2;
+  Foo c = 3;
+}

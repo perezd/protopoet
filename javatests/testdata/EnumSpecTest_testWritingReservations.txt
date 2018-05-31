@@ -1,0 +1,11 @@
+// comment
+enum A {
+  reserved 1, 2, 3 to 5;
+  // comment
+  reserved "foo", "bar";
+
+  // field 1
+  A = 10;
+  B = 11;
+  C = 12;
+}

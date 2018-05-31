@@ -1,0 +1,15 @@
+Some quick notes:
+
+- Please file an issue before submitting a PR. This lets us discuss what you're planning and lets me help potentially guide design where needed.
+
+- All PRs must have accompanying tests that exercise the functionality delta being presented. PRs won't be merged without the entire branch passing all tests.
+
+- Please adhere to the style/conventions of the codebase. I've done my best to keep the code consistent, and I expect the same from others.
+
+- ProtoPoet was developed using Bazel in a Linux environment. YMMV if you're attempting to develop outside of those expectations. Please file bugs/PRs to address issues if you can!
+
+=========
+
+NOTE: All contributors to this project will be held to the Contributor Covenant Code of Conduct (https://www.contributor-covenant.org/version/1/4/code-of-conduct.txt)
+
+I (Derek Perez) reserve the right to take appropriate action(s) if a contributor violates the agreement as defined above.

@@ -1,0 +1,4 @@
+// this is a test of my ability
+// to write a file comment
+syntax = "proto3";
+

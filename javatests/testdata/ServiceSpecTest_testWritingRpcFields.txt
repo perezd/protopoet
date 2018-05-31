@@ -1,0 +1,11 @@
+// comment
+service A {
+  // comment A
+  rpc A (Req) returns (Res);
+  // comment B
+  rpc B (stream Req) returns (Res);
+  // comment C
+  rpc C (Req) returns (stream Res);
+  // comment D
+  rpc D (stream Req) returns (stream Res);
+}

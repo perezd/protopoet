@@ -1,0 +1,14 @@
+// comment
+syntax = "proto3";
+
+package com.testing;
+
+import "google/protobuf/descriptor.proto";
+
+// comment
+extend google.protobuf.ServiceOptions {
+  bool foo = 1;
+  // comment
+  Bar bar = 2;
+}
+

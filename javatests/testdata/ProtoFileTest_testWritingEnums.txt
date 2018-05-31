@@ -1,0 +1,26 @@
+// Tests writing top level and nested enums
+syntax = "proto3";
+
+package com.testing;
+
+// This is toplevel
+enum TopLevel {
+  // reserved
+  reserved 3, 5;
+
+  A = 1;
+  B = 2;
+}
+
+message TopLevelMsg {
+  // this is inside
+  enum InnerEnum {
+    // reserved
+    reserved "foo";
+
+    C = 1;
+    // field comment
+    D = 2;
+  }
+}
+

@@ -1,0 +1,7 @@
+// comment
+message A {
+  // comment
+  option (b) = "hello";
+  // comment
+  option (c) = Test;
+}

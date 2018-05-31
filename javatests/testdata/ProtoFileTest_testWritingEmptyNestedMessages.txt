@@ -1,0 +1,15 @@
+// this is a test of writing multiple top-level messages
+// with nested messages inside of them.
+syntax = "proto3";
+
+package com.testing;
+
+// this has a comment
+message A {}
+
+message B {
+  message C {}
+  // this one has a comment
+  message D {}
+}
+

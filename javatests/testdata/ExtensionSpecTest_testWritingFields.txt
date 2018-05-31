@@ -1,0 +1,6 @@
+// comment
+extend google.protobuf.ServiceOptions {
+  string test = 1;
+  // comment
+  bool bar = 2;
+}

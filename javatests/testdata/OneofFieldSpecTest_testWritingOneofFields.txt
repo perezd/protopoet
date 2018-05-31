@@ -1,0 +1,6 @@
+// comment
+oneof A {
+  bool b = 1;
+  // comment
+  string c = 2;
+}
