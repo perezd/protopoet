@@ -13,7 +13,7 @@ addons:
       - bazel
 
 install:
-  - go get -u github.com/bazelbuild/buildifier
+  - go get -u github.com/bazelbuild/buildifier/buildifier
 
 script:
   # Check that our direct testing passes.
