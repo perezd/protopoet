@@ -9,15 +9,7 @@ addons:
         key_url: 'https://storage.googleapis.com/bazel-apt/doc/apt-key.pub.gpg'
     packages:
       - bazel
-install:
-  - gimme 1.10
-  - go get -t github.com/bazelbuild/buildifier/buildifier
 script:
   # Check that our direct testing passes.
   - bazel clean && bazel build //...
   - bazel clean && bazel test --test_output=errors //...
-
-  # Check for issues with the format of our bazel config files.
-  - buildifier -mode=check $(find . -name BUILD -type f)
-  - buildifier -mode=check $(find . -name WORKSPACE -type f)
-  - buildifier -mode=check $(find . -name '*.bzl' -type f)
