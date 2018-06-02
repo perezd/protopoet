@@ -24,6 +24,10 @@ import com.google.common.collect.ImmutableList;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+/**
+ * Defines a oneof field for use with any type that implements {@link MessageField}.
+ * Learn more: https://developers.google.com/protocol-buffers/docs/proto3#using-oneof
+ */
 public final class OneofFieldSpec implements MessageField, Useable.Fields {
 
   /** Creates a builder for a {@link OneofFieldSpec}. */
@@ -144,6 +148,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
       return this;
     }
 
+    /** Adds fields to the oneof. See {@link MessageFieldSpec}. Maps and oneofs are not supported. */
     @SafeVarargs
     public final Builder addMessageFields(Buildable<MessageField>... fields) {
       return addMessageFields(ImmutableList.copyOf(fields));
@@ -165,6 +170,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
       return addOneofOptions(ImmutableList.copyOf(options));
     }
 
+    /** Builds a new instance of {@link OneofFieldSpec}. */
     @Override
     public MessageField build() {
       return new OneofFieldSpec(this);
