@@ -1,11 +1,13 @@
 ProtoPoet
 =========
 
+[![Build Status](https://travis-ci.org/perezd/protopoet.svg?branch=master)](https://travis-ci.org/perezd/protopoet)
+
 `ProtoPoet` is a Java API for generating [Protocol Buffer](https://developers.google.com/protocol-buffers/) (`.proto`) source files. This library was inspired by the fantastic [JavaPoet](https://github.com/square/javapoet) project by Square.
 
 > NOTE: ProtoPoet 1.0 only supports `proto3` syntax. If you have a need for `proto2` syntax support, please file an issue and/or submit a PR for it.
 
-ProtoPoet has a fully documented API, please refer to the JavaDoc reference for more details, or keep reading to see some quick examples of to use this API.
+ProtoPoet has a fully documented API, please refer to the [Javadoc reference](https://derek.perez.earth/protopoet/) for more details, or keep reading to see some quick examples of to use this API.
 
 ## Defining a Simple Message
 
@@ -219,6 +221,40 @@ ExtensionSpec.builder(OptionType.MESSAGE)
 
 Note that when adding an `ExtensionSpec` to a `ProtoFile`, the necessary import from the example will be added and hoisted to the top of the generated output for you.
 
+## Using Protopoet
+
+### Within a Bazel project
+
+Protopoet uses [Bazel](http://bazel.build) as its build system of choice.
+If you're using Bazel in your project, simply add this repository
+to your `WORKSPACE` for instance:
+
+```
+http_archive(
+  name = "protopoet",
+  url = "https://github.com/perezd/protopoet/archive/master.zip"
+)
+```
+
+Then depend on it in your `BUILD` files using this target: `@protopoet//java/protopoet`
+
+NOTE: If you plan to do this, I recommend you use the `sha256` attribute
+or a specific git tag to ensure things don't change on you unexpectedly.
+
+
+### Building from source (for use anywhere)
+
+With Bazel installed, clone this repo down locally and run the following
+commands from the repo root:
+
+```
+bazel test //javatests/...
+bazel build //java/protopoet
+
+```
+
+All the tests should pass and you should now find a `.jar` file in a
+folder in the repo such as `bazel-bin/java/protopoet/libprotopoet.jar`.
 
 ## Thank You
 
