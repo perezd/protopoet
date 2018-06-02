@@ -2,8 +2,11 @@ sudo: required
 dist: trusty
 language:
   - java
+  - go
 jdk:
   - oraclejdk8  # Building Bazel requires JDK8.
+go:
+  - "1.10.x"
 addons:
   apt:
     sources:
