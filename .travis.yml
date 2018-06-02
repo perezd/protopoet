@@ -11,7 +11,7 @@ addons:
       - bazel
 install:
   - gimme 1.10
-  - go get -u github.com/bazelbuild/buildifier/buildifier
+  - go get -t github.com/bazelbuild/buildifier/buildifier
 script:
   # Check that our direct testing passes.
   - bazel clean && bazel build //...
