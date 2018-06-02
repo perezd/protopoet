@@ -1,12 +1,7 @@
 sudo: required
 dist: trusty
-language:
-  - java
-  - go
-jdk:
-  - oraclejdk8  # Building Bazel requires JDK8.
-go:
-  - "1.10.x"
+language: java
+jdk: oraclejdk8  # Building Bazel requires JDK8.
 addons:
   apt:
     sources:
@@ -14,10 +9,9 @@ addons:
         key_url: 'https://storage.googleapis.com/bazel-apt/doc/apt-key.pub.gpg'
     packages:
       - bazel
-
 install:
+  - gimmie 1.8.3
   - go get -u github.com/bazelbuild/buildifier/buildifier
-
 script:
   # Check that our direct testing passes.
   - bazel clean && bazel build //...
