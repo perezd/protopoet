@@ -54,7 +54,7 @@ ProtoFile.builder()
   .addImports(ImportSpec.of("some/file.proto"));
 ```
 
-Note that ProtoPoet does **nothing** with the path string you provide it, just renders it. It is up to you to ensure its accessible at compile time etc.
+> NOTE: that ProtoPoet does **nothing** with the path string you provide it, just renders it. It is up to you to ensure its accessible at compile time etc.
 
 
 ## Using Oneofs and Maps with Message
@@ -238,7 +238,7 @@ http_archive(
 
 Then depend on it in your `BUILD` files using this target: `@protopoet//java/protopoet`
 
-NOTE: If you plan to do this, I recommend you use the `sha256` attribute
+> NOTE: If you plan to do this, I recommend you use the `sha256` attribute
 or a specific git tag to ensure things don't change on you unexpectedly.
 
 
