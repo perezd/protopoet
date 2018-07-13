@@ -17,7 +17,7 @@
 package protopoet;
 
 /** API for defining a type that is buildable by calling {@code build()}. */
-interface Buildable<T> {
+public interface Buildable<T> {
 
   /** Returns a built instance of the declared type. */
   T build();
