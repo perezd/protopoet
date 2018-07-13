@@ -123,7 +123,7 @@ public final class ExtensionSpec implements Emittable, Buildable<ExtensionSpec>,
      * Adds fields to the extension. See {@link MessageFieldSpec}. 
      * NOTE: oneofs and maps are not allowed as extension fields.
      */
-    public Builder addExtensionFields(Iterable<Buildable<MessageField>> fields) {
+    public Builder addExtensionFields(Iterable<? extends Buildable<MessageField>> fields) {
       extensionFields = ImmutableList.<MessageField>builder()
         .addAll(extensionFields)
         .addAll(Buildables.buildAll(fields, field ->

@@ -182,7 +182,7 @@ public final class ProtoFile implements Emittable {
     }
 
     /** Declares a list of imports for the proto file. See {@link ImportSpec}. */
-    public Builder addImports(Iterable<Buildable<ImportSpec>> impts) {
+    public Builder addImports(Iterable<? extends Buildable<ImportSpec>> impts) {
       imports = ImmutableList.<ImportSpec>builder()
         .addAll(imports)
         .addAll(ImmutableList.copyOf(Buildables.buildAll(impts)))
@@ -197,7 +197,7 @@ public final class ProtoFile implements Emittable {
     }
 
     /** Declares a list of top level messages for the proto file. See {@link MessageSpec}. */
-    public Builder addMessages(Iterable<Buildable<MessageSpec>> msgs) {
+    public Builder addMessages(Iterable<? extends Buildable<MessageSpec>> msgs) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(msgs)))
@@ -211,7 +211,7 @@ public final class ProtoFile implements Emittable {
     }
 
     /** Declares a list of top level eums for the proto file. See {@link EnumSpec}. */
-    public Builder addEnums(Iterable<Buildable<EnumSpec>> enums) {
+    public Builder addEnums(Iterable<? extends Buildable<EnumSpec>> enums) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(enums)))
@@ -225,7 +225,7 @@ public final class ProtoFile implements Emittable {
     }
 
     /** Declares a list of top level extensions for the proto file. See {@link ExtensionSpec}. */
-    public Builder addExtensions(Iterable<Buildable<ExtensionSpec>> extensions) {
+    public Builder addExtensions(Iterable<? extends Buildable<ExtensionSpec>> extensions) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(extensions)))
@@ -240,7 +240,7 @@ public final class ProtoFile implements Emittable {
     }
 
     /** Declares a list of top level services for the proto file. See {@link ServiceSpec}. */
-    public Builder addServices(Iterable<Buildable<ServiceSpec>> services) {
+    public Builder addServices(Iterable<? extends Buildable<ServiceSpec>> services) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(services)))
@@ -254,7 +254,7 @@ public final class ProtoFile implements Emittable {
     }
 
     /** Adds options to the file. See {@link OptionSpec}. */
-    public Builder addFileOptions(Iterable<Buildable<OptionSpec>> options) {
+    public Builder addFileOptions(Iterable<? extends Buildable<OptionSpec>> options) {
       this.options = ImmutableList.<OptionSpec>builder()
         .addAll(this.options)
         .addAll(Buildables.buildAll(options,

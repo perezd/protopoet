@@ -150,7 +150,7 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
     }
 
     /** Adds options to the field. See {@link OptionSpec}. */
-    public Builder addFieldOptions(Iterable<Buildable<OptionSpec>> options) {
+    public Builder addFieldOptions(Iterable<? extends Buildable<OptionSpec>> options) {
       this.options = ImmutableList.<OptionSpec>builder()
         .addAll(this.options)
         .addAll(Buildables.buildAll(options,

@@ -117,7 +117,7 @@ public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Use
     }
 
     /** Adds an rpc field to the service, see {@link RpcFieldSpec}. */
-    public Builder addRpcFields(Iterable<Buildable<RpcFieldSpec>> rpcFields) {
+    public Builder addRpcFields(Iterable<? extends Buildable<RpcFieldSpec>> rpcFields) {
       this.rpcFields = ImmutableList.<RpcFieldSpec>builder()
         .addAll(this.rpcFields)
         .addAll(Buildables.buildAll(rpcFields))
@@ -132,7 +132,7 @@ public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Use
     }
 
     /** Adds options to the service. See {@link OptionSpec}. */
-    public Builder addServiceOptions(Iterable<Buildable<OptionSpec>> options) {
+    public Builder addServiceOptions(Iterable<? extends Buildable<OptionSpec>> options) {
       this.options = ImmutableList.<OptionSpec>builder()
         .addAll(this.options)
         .addAll(Buildables.buildAll(options,

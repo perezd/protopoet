@@ -23,14 +23,14 @@ import java.util.function.Consumer;
 final class Buildables {
 
   // Helper method that reduces call site boilerplate when using a Buildable.
-  static <T extends Buildable<T>> Iterable<T> buildAll(Iterable<Buildable<T>> buildables) {
+  static <T extends Buildable<T>> Iterable<T> buildAll(Iterable<? extends Buildable<T>> buildables) {
     return Streams.stream(buildables)
       .map(Buildable::build)
       .collect(ImmutableList.toImmutableList());
   }
 
   // Helper method that reduces call site boilerplate when using a Buildable. Allows a peekable.
-  static <T extends Buildable<T>> Iterable<T> buildAll(Iterable<Buildable<T>> buildables, Consumer<T> checker) {
+  static <T extends Buildable<T>> Iterable<T> buildAll(Iterable<? extends Buildable<T>> buildables, Consumer<T> checker) {
     return Streams.stream(buildables)
       .map(Buildable::build)
       .peek(checker)

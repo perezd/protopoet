@@ -139,7 +139,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
     }
 
     /** Adds fields to the enum. See {@link EnumFieldSpec}. */
-    public Builder addEnumFields(Iterable<Buildable<EnumFieldSpec>> fields) {
+    public Builder addEnumFields(Iterable<? extends Buildable<EnumFieldSpec>> fields) {
       enumFields = ImmutableList.<EnumFieldSpec>builder()
         .addAll(enumFields)
         .addAll(Buildables.buildAll(fields))
@@ -168,7 +168,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
     }
 
     /** Adds options to the enum. See {@link OptionSpec}. */
-    public Builder addEnumOptions(Iterable<Buildable<OptionSpec>> options) {
+    public Builder addEnumOptions(Iterable<? extends Buildable<OptionSpec>> options) {
       this.options = ImmutableList.<OptionSpec>builder()
         .addAll(this.options)
         .addAll(Buildables.buildAll(options,

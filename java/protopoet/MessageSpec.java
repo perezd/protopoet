@@ -152,7 +152,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
     }
 
     /** Adds enums to the inside of the message, see {@link EnumSpec}. */
-    public Builder addEnums(Iterable<Buildable<EnumSpec>> enums) {
+    public Builder addEnums(Iterable<? extends Buildable<EnumSpec>> enums) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(enums)))
@@ -167,7 +167,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
     }
 
     /** Adds field reservations for the message, see {@link ReservationSpec}. */
-    public Builder addReservations(Iterable<Buildable<ReservationSpec>> resos) {
+    public Builder addReservations(Iterable<? extends Buildable<ReservationSpec>> resos) {
       reservations = ImmutableList.<ReservationSpec>builder()
         .addAll(reservations)
         .addAll(Buildables.buildAll(resos))
@@ -181,7 +181,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
     }
 
     /** Adds inner messages to a message. */
-    public Builder addMessages(Iterable<Buildable<MessageSpec>> msgs) {
+    public Builder addMessages(Iterable<? extends Buildable<MessageSpec>> msgs) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(msgs)))
@@ -195,7 +195,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
     }
 
     /** Adds message fields to the message. see {@link MessageFieldSpec}. */
-    public Builder addMessageFields(Iterable<Buildable<MessageField>> fields) {
+    public Builder addMessageFields(Iterable<? extends Buildable<MessageField>> fields) {
       srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
         .addAll(srcBlocks)
         .add(ImmutableList.copyOf(Buildables.buildAll(fields)))
@@ -212,7 +212,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
     }
 
     /** Adds options to the message. See {@link OptionSpec}. */
-    public Builder addMessageOptions(Iterable<Buildable<OptionSpec>> options) {
+    public Builder addMessageOptions(Iterable<? extends Buildable<OptionSpec>> options) {
       this.options = ImmutableList.<OptionSpec>builder()
         .addAll(this.options)
         .addAll(Buildables.buildAll(options,

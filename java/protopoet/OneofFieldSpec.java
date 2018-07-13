@@ -124,7 +124,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
     }
 
     /** Adds fields to the oneof. See {@link MessageFieldSpec}. Maps and oneofs are not supported. */
-    public Builder addMessageFields(Iterable<Buildable<MessageField>> fields) {
+    public Builder addMessageFields(Iterable<? extends Buildable<MessageField>> fields) {
       Iterable<MessageField> oneofFields = Buildables.buildAll(fields);
       for (MessageField field : oneofFields) {
         // Spec says map fields are now allowed, specifically.
@@ -155,7 +155,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
     }
 
     /** Adds options to the oneof. See {@link OptionSpec}. */
-    public Builder addOneofOptions(Iterable<Buildable<OptionSpec>> options) {
+    public Builder addOneofOptions(Iterable<? extends Buildable<OptionSpec>> options) {
       this.options = ImmutableList.<OptionSpec>builder()
         .addAll(this.options)
         .addAll(Buildables.buildAll(options,
