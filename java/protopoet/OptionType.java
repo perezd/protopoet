@@ -20,7 +20,7 @@ package protopoet;
  * Valid types of options available in the Protocol Buffers language. 
  * Learn more: https://developers.google.com/protocol-buffers/docs/proto#customoptions
  */
-public enum OptionType {
+enum OptionType {
   /** See {@link ProtoFile} for more info. */
   FILE("FileOptions"),
 

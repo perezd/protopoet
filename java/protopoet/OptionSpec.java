@@ -32,8 +32,48 @@ import java.util.List;
  */
 public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
 
+  /** Creates a builder for a File {@link OptionSpec}. */
+  public static Builder fileOption(String optionName) {
+    return builder(OptionType.FILE, optionName);
+  }
+
+  /** Creates a builder for a Message {@link OptionSpec}. */
+  public static Builder messageOption(String optionName) {
+    return builder(OptionType.MESSAGE, optionName);
+  }
+
+  /** Creates a builder for a Field {@link OptionSpec}. */
+  public static Builder fieldOption(String optionName) {
+    return builder(OptionType.FIELD, optionName);
+  }
+
+  /** Creates a builder for a Enum {@link OptionSpec}. */
+  public static Builder enumOption(String optionName) {
+    return builder(OptionType.ENUM, optionName);
+  }
+
+  /** Creates a builder for a Enum Value {@link OptionSpec}. */
+  public static Builder enumValueOption(String optionName) {
+    return builder(OptionType.ENUM_VALUE, optionName);
+  }
+
+  /** Creates a builder for a Service {@link OptionSpec}. */
+  public static Builder serviceOption(String optionName) {
+    return builder(OptionType.SERVICE, optionName);
+  }
+
+  /** Creates a builder for a Oneof {@link OptionSpec}. */
+  public static Builder oneofOption(String optionName) {
+    return builder(OptionType.ONEOF, optionName);
+  }
+
+  /** Creates a builder for a Method {@link OptionSpec}. */
+  public static Builder methodOption(String optionName) {
+    return builder(OptionType.METHOD, optionName);
+  }
+  
   /** Creates a builder for an {@link OptionSpec}. */
-  public static Builder builder(OptionType optionType, String optionName) {
+  static Builder builder(OptionType optionType, String optionName) {
     checkNotNull(optionType, "option type may not be null");
     checkNotNull(optionName, "option name may not be null");
     return new Builder(optionType, optionName);
