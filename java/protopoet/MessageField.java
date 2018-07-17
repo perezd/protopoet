@@ -22,7 +22,7 @@ package protopoet;
  * in a single statement. 
  * See {@link MessageFieldSpec}, {@link OneofFieldSpec}, and {@link MapFieldSpec}.
  */
-interface MessageField extends Emittable, Buildable<MessageField> {
+public interface MessageField extends Emittable, Buildable<MessageField> {
   /** Provides the defined name for a message field. */
   String fieldName();
 }
