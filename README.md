@@ -249,12 +249,12 @@ commands from the repo root:
 
 ```
 bazel test //javatests/...
-bazel build //java/protopoet
+bazel build //java/protopoet:release
 
 ```
 
 All the tests should pass and you should now find a `.jar` file in a
-folder in the repo such as `bazel-bin/java/protopoet/libprotopoet.jar`.
+folder in the repo such as `bazel-bin/java/protopoet/librelease.jar` (you can rename it if you want after you've copied it to its destination).
 
 ## Thank You
 
