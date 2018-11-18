@@ -1,6 +1,16 @@
 package(default_visibility = ["//visibility:public"])
 
 java_library(
+   name = "release",
+   resource_jars = [
+     ":libprotopoet.jar",
+     ":libproto_writer.jar",
+     ":libusage_monitor.jar",
+     ":libline_wrapper.jar",
+   ],
+)
+
+java_library(
     name = "protopoet",
     srcs = [
         "Buildable.java",
