@@ -1,31 +1,13 @@
 workspace(name = "protopoet")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
-    name = "guava",
-    url = "https://github.com/perezd/guava/archive/f8d89fb5f7720e20680cc8bd1fe16bb27072c5c6.zip",
-    strip_prefix = "guava-f8d89fb5f7720e20680cc8bd1fe16bb27072c5c6",
-    sha256 = "666ecd6f3522f85f83be6ef75083f199942f2e3f06b61a42e08b8fa69ed2f1e6",
+    name = "bazel_common",
+    sha256 = "3656cb5b1a49be1077f13ba9e9cf79e690675870dc7edec8943aebaf7e94dd44",
+    strip_prefix = "bazel-common-c0a6655a70fb389dbb6473989450df0c86447ec3",
+    urls = ["https://github.com/google/bazel-common/archive/c0a6655a70fb389dbb6473989450df0c86447ec3.zip"],
 )
 
-load("@guava//:defs.bzl", "guava_src_dependencies")
-guava_src_dependencies()
-
-maven_jar(
-    name = "junit_jar",
-    artifact = "junit:junit:4.12",
-)
-
-bind(
-    name = "junit",
-    actual = "@junit_jar//jar",
-)
-
-maven_jar(
-    name = "truth_jar",
-    artifact = "com.google.truth:truth:0.39",
-)
-
-bind(
-    name = "truth",
-    actual = "@truth_jar//jar",
-)
+load("@bazel_common//:workspace_defs.bzl", "google_common_workspace_rules")
+google_common_workspace_rules()

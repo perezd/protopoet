@@ -1,0 +1,2 @@
+build --host_javacopt="-Xep:BetaApi:OFF" --javacopt="-Xep:BetaApi:OFF"
+test --test_output=errors

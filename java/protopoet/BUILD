@@ -1,16 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
 java_library(
-   name = "release",
-   resource_jars = [
-     ":libprotopoet.jar",
-     ":libproto_writer.jar",
-     ":libusage_monitor.jar",
-     ":libline_wrapper.jar",
-   ],
-)
-
-java_library(
     name = "protopoet",
     srcs = [
         "Buildable.java",
@@ -38,8 +28,7 @@ java_library(
     deps = [
         ":proto_writer",
         ":usage_monitor",
-        "@guava//guava/src/com/google/common/base",
-        "@guava//guava/src/com/google/common/collect",
+        "@bazel_common//third_party/java/guava",
     ],
 )
 
@@ -47,7 +36,7 @@ java_library(
     name = "line_wrapper",
     srcs = ["LineWrapper.java"],
     deps = [
-        "@guava//guava/src/com/google/common/base",
+        "@bazel_common//third_party/java/guava",
     ],
 )
 
@@ -60,7 +49,7 @@ java_library(
         "UsedNameMonitor.java",
     ],
     deps = [
-        "@guava//guava/src/com/google/common/collect",
+        "@bazel_common//third_party/java/guava",
     ],
 )
 
@@ -72,6 +61,18 @@ java_library(
     ],
     deps = [
         ":line_wrapper",
-        "@guava//guava/src/com/google/common/base",
+        "@bazel_common//third_party/java/guava",
     ],
+)
+
+# This target is used to create a combined jar of all the necessary
+# subcomponents of protopoet.
+java_library(
+   name = "release",
+   resource_jars = [
+     ":libprotopoet.jar",
+     ":libproto_writer.jar",
+     ":libusage_monitor.jar",
+     ":libline_wrapper.jar",
+   ],
 )
