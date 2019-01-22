@@ -244,6 +244,8 @@ or a specific git tag to ensure things don't change on you unexpectedly.
 
 ### Building from source (for use anywhere)
 
+NOTE: Protopoet has a single dependency, [Guava](https://github.com/google/guava). It should be available at runtime.
+
 With Bazel installed, clone this repo down locally and run the following
 commands from the repo root:
 
