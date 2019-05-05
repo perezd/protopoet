@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Models an Option in the Protocol Buffers language.
- * Learn more: https://developers.google.com/protocol-buffers/docs/proto#options
+ * Models an Option in the Protocol Buffers language. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/proto#options
  */
 public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
 
@@ -71,7 +71,7 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
   public static Builder methodOption(String optionName) {
     return builder(OptionType.METHOD, optionName);
   }
-  
+
   /** Creates a builder for an {@link OptionSpec}. */
   static Builder builder(OptionType optionType, String optionName) {
     checkNotNull(optionType, "option type may not be null");
@@ -80,13 +80,13 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
   }
 
   // Snippet of resuable logic for rendering field-based options.
-  static ProtoWriter emitFieldOptions(List<OptionSpec> options,
-                                      ProtoWriter writer) throws IOException {
+  static ProtoWriter emitFieldOptions(List<OptionSpec> options, ProtoWriter writer)
+      throws IOException {
     if (!options.isEmpty()) {
       writer.emit(" [");
       for (int i = 0; i < options.size(); i++) {
         options.get(i).emit(writer);
-        if (i+1 < options.size()) {
+        if (i + 1 < options.size()) {
           writer.emit(", ");
         }
       }
@@ -94,54 +94,55 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
     }
     return writer;
   }
-  
+
   // Field option types have specialized formatting that are inconsistent with non-field options
   // such as Message, Service, File, etc.
-  private static ImmutableSet<OptionType> FIELD_OPTION_TYPES = ImmutableSet.of(OptionType.FIELD,
-                                                                               OptionType.ENUM_VALUE);
+  private static ImmutableSet<OptionType> FIELD_OPTION_TYPES =
+      ImmutableSet.of(OptionType.FIELD, OptionType.ENUM_VALUE);
 
   // Protobufs have some well known option names that require special formatting to
   // disambiguate from custom options. This is largely a rendering implementation
   // detail so we keep a list sycned with this file:
   // https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto
   private static ImmutableMap<OptionType, ImmutableSet<String>> WELL_KNOWN_OPTIONS;
+
   static {
-    WELL_KNOWN_OPTIONS = ImmutableMap.<OptionType, ImmutableSet<String>>builder()
-      .put(OptionType.FILE, ImmutableSet.of("java_package",
-                                            "java_outer_classname",
-                                            "java_multiple_files",
-                                            "java_generate_equals_and_hash",
-                                            "java_string_check_utf8",
-                                            "optimize_for",
-                                            "go_package",
-                                            "cc_generic_services",
-                                            "java_generic_services",
-                                            "py_generic_services",
-                                            "php_generic_services",
-                                            "deprecated",
-                                            "cc_enable_arenas",
-                                            "objc_class_prefix",
-                                            "csharp_namespace",
-                                            "swift_prefix",
-                                            "php_class_prefix",
-                                            "php_namespace"))
-      .put(OptionType.MESSAGE, ImmutableSet.of("message_set_wire_format",
-                                               "no_standard_descriptor_accessor",
-                                               "deprecated"))
-      .put(OptionType.SERVICE, ImmutableSet.of("deprecated"))
-      .put(OptionType.ENUM, ImmutableSet.of("allow_alias",
-                                            "deprecated"))
-      .put(OptionType.ONEOF, ImmutableSet.of())
-      .put(OptionType.FIELD, ImmutableSet.of("ctype",
-                                             "packed",
-                                             "jstype",
-                                             "lazy",
-                                             "deprecated",
-                                             "weak"))
-      .put(OptionType.ENUM_VALUE, ImmutableSet.of("deprecated"))
-      .put(OptionType.METHOD, ImmutableSet.of("deprecated",
-                                              "idempotency_level"))
-      .build();
+    WELL_KNOWN_OPTIONS =
+        ImmutableMap.<OptionType, ImmutableSet<String>>builder()
+            .put(
+                OptionType.FILE,
+                ImmutableSet.of(
+                    "java_package",
+                    "java_outer_classname",
+                    "java_multiple_files",
+                    "java_generate_equals_and_hash",
+                    "java_string_check_utf8",
+                    "optimize_for",
+                    "go_package",
+                    "cc_generic_services",
+                    "java_generic_services",
+                    "py_generic_services",
+                    "php_generic_services",
+                    "deprecated",
+                    "cc_enable_arenas",
+                    "objc_class_prefix",
+                    "csharp_namespace",
+                    "swift_prefix",
+                    "php_class_prefix",
+                    "php_namespace"))
+            .put(
+                OptionType.MESSAGE,
+                ImmutableSet.of(
+                    "message_set_wire_format", "no_standard_descriptor_accessor", "deprecated"))
+            .put(OptionType.SERVICE, ImmutableSet.of("deprecated"))
+            .put(OptionType.ENUM, ImmutableSet.of("allow_alias", "deprecated"))
+            .put(OptionType.ONEOF, ImmutableSet.of())
+            .put(
+                OptionType.FIELD,
+                ImmutableSet.of("ctype", "packed", "jstype", "lazy", "deprecated", "weak"))
+            .put(OptionType.ENUM_VALUE, ImmutableSet.of("deprecated"))
+            .put(OptionType.METHOD, ImmutableSet.of("deprecated", "idempotency_level"))
+            .build();
   }
 
   private final OptionType optionType;
@@ -182,16 +183,13 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
     // different approach for both field and non-field use cases.
     if (optionValueType == FieldType.MESSAGE) {
       if (!isFieldOptionType) {
-        writer
-          .emit(String.format("option %s = {\n", formattedOptionName))
-          .indent();
+        writer.emit(String.format("option %s = {\n", formattedOptionName)).indent();
         // Cast is safe here because the builder below enforces type safety.
         for (FieldValue fieldValue : (Iterable<FieldValue>) optionValue) {
-          writer.emit(String.format("%s: %s\n", fieldValue.fieldName(), fieldValue.formattedValue()));
+          writer.emit(
+              String.format("%s: %s\n", fieldValue.fieldName(), fieldValue.formattedValue()));
         }
-        writer
-          .unindent()
-          .emit("};\n");
+        writer.unindent().emit("};\n");
         return;
       }
 
@@ -214,9 +212,12 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
   }
 
   private static String formatOptionName(OptionType optionType, String optionName) {
-    checkState(WELL_KNOWN_OPTIONS.containsKey(optionType),
-               String.format("unexpected option type: %s", optionType));
-    return WELL_KNOWN_OPTIONS.get(optionType).contains(optionName) ? optionName : "(" + optionName + ")";
+    checkState(
+        WELL_KNOWN_OPTIONS.containsKey(optionType),
+        String.format("unexpected option type: %s", optionType));
+    return WELL_KNOWN_OPTIONS.get(optionType).contains(optionName) || optionName.startsWith("(")
+        ? optionName
+        : "(" + optionName + ")";
   }
 
   /** Builder for producing new instances of {@link OptionSpec}. */
@@ -227,21 +228,26 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
     private ImmutableList<String> optionComment = ImmutableList.of();
     private FieldType optionValueType;
     private Object optionValue;
-    
+
     private Builder(OptionType optionType, String optionName) {
       this.optionType = optionType;
       this.optionName = optionName;
     }
 
-    /** Declares a top-level comment for the option. Note, this only renders for non-field options. */
+    /**
+     * Declares a top-level comment for the option. Note, this only renders for non-field options.
+     */
     public Builder setOptionComment(Iterable<String> lines) {
-      checkState(!OptionSpec.FIELD_OPTION_TYPES.contains(optionType),
-                 "comments aren't available for field options");
+      checkState(
+          !OptionSpec.FIELD_OPTION_TYPES.contains(optionType),
+          "comments aren't available for field options");
       optionComment = ImmutableList.copyOf(lines);
       return this;
     }
 
-    /** Declares a top-level comment for the option. Note, this only renders for non-field options. */
+    /**
+     * Declares a top-level comment for the option. Note, this only renders for non-field options.
+     */
     public Builder setOptionComment(String... lines) {
       return setOptionComment(ImmutableList.copyOf(lines));
     }
@@ -249,40 +255,40 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
     /** Sets an integer-based value (eg: int32, uint32, fixed32, sfixed32). */
     public Builder setValue(FieldType valueType, int intValue) {
       switch (valueType) {
-      case INT32:
-      case UINT32:
-      case FIXED32:
-      case SFIXED32:
-        optionValueType = valueType;
-        optionValue = intValue;
-        return this;
-      default:
-        throw new IllegalArgumentException(String.format("'%s' invalid type for an int value",
-                                                         valueType));
+        case INT32:
+        case UINT32:
+        case FIXED32:
+        case SFIXED32:
+          optionValueType = valueType;
+          optionValue = intValue;
+          return this;
+        default:
+          throw new IllegalArgumentException(
+              String.format("'%s' invalid type for an int value", valueType));
       }
     }
 
     /** Sets a long-based value (eg: int64, uint64, fixed64, sfixed64). */
     public Builder setValue(FieldType valueType, long longValue) {
       switch (valueType) {
-      case INT64:
-      case UINT64:
-      case FIXED64:
-      case SFIXED64:
-        optionValueType = valueType;
-        optionValue = longValue;
-        return this;
-      default:
-        throw new IllegalArgumentException(String.format("'%s' invalid type for a long value",
-                                                         valueType));
+        case INT64:
+        case UINT64:
+        case FIXED64:
+        case SFIXED64:
+          optionValueType = valueType;
+          optionValue = longValue;
+          return this;
+        default:
+          throw new IllegalArgumentException(
+              String.format("'%s' invalid type for a long value", valueType));
       }
     }
 
     /** Sets a float-based value. */
     public Builder setValue(FieldType valueType, float floatValue) {
-      checkArgument(valueType == FieldType.FLOAT,
-                    String.format("'%s' invalid type for a float value",
-                                  valueType));
+      checkArgument(
+          valueType == FieldType.FLOAT,
+          String.format("'%s' invalid type for a float value", valueType));
       optionValueType = valueType;
       optionValue = floatValue;
       return this;
@@ -290,9 +296,9 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
 
     /** Sets a double-based value. */
     public Builder setValue(FieldType valueType, double doubleValue) {
-      checkArgument(valueType == FieldType.DOUBLE,
-                    String.format("'%s' invalid type for a double value",
-                                  valueType));
+      checkArgument(
+          valueType == FieldType.DOUBLE,
+          String.format("'%s' invalid type for a double value", valueType));
       optionValueType = valueType;
       optionValue = doubleValue;
       return this;
@@ -302,32 +308,32 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
     public Builder setValue(FieldType valueType, String stringValue) {
       checkNotNull(stringValue, "value must not be null");
       switch (valueType) {
-      case ENUM:
-      case STRING:
-      case BYTES:
-        optionValueType = valueType;
-        optionValue = stringValue;
-        return this;
-      default:
-        throw new IllegalArgumentException(String.format("'%s' invalid type for a string value",
-                                                         valueType));
+        case ENUM:
+        case STRING:
+        case BYTES:
+          optionValueType = valueType;
+          optionValue = stringValue;
+          return this;
+        default:
+          throw new IllegalArgumentException(
+              String.format("'%s' invalid type for a string value", valueType));
       }
     }
 
     /** Sets a boolean value. */
     public Builder setValue(FieldType valueType, boolean boolValue) {
-      checkArgument(valueType == FieldType.BOOL,
-                    String.format("'%s' invalid type for a bool value",
-                                  valueType));
+      checkArgument(
+          valueType == FieldType.BOOL,
+          String.format("'%s' invalid type for a bool value", valueType));
       optionValueType = valueType;
       optionValue = boolValue;
       return this;
     }
 
     public Builder setValue(FieldType valueType, Iterable<FieldValue> fieldValues) {
-      checkArgument(valueType == FieldType.MESSAGE,
-                    String.format("'%s' invalid type for a message value",
-                                  valueType));
+      checkArgument(
+          valueType == FieldType.MESSAGE,
+          String.format("'%s' invalid type for a message value", valueType));
       optionValueType = valueType;
       optionValue = fieldValues;
       return this;
