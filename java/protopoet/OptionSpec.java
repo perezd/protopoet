@@ -252,6 +252,16 @@ public final class OptionSpec implements Buildable<OptionSpec>, Emittable {
       return setOptionComment(ImmutableList.copyOf(lines));
     }
 
+    /**
+     * Sets value and infers the field type based on passed in value. Check {@link FieldType} for
+     * more info on how it does it, if you need more granularity or predictibility, don't use this.
+     */
+    public Builder setValue(Object value) {
+      optionValueType = FieldType.inferFrom(value);
+      optionValue = value;
+      return this;
+    }
+
     /** Sets an integer-based value (eg: int32, uint32, fixed32, sfixed32). */
     public Builder setValue(FieldType valueType, int intValue) {
       switch (valueType) {

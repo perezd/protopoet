@@ -16,9 +16,9 @@
 
 package protopoet;
 
-/** 
- * All standard scalar types a field may represent.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#fields
+/**
+ * All standard scalar types a field may represent. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#fields
  */
 public enum FieldType {
   DOUBLE,
@@ -39,6 +39,41 @@ public enum FieldType {
   MESSAGE,
   ENUM;
 
+  /**
+   * Attempts to guess at the FieldType based on the provided value. Note, this outputs INT32
+   * forInteger and INT64 for Long, if you need more specific types for numerics, don't use this.
+   */
+  public static FieldType inferFrom(Object value) {
+    if (value instanceof Double) {
+      return DOUBLE;
+    }
+    if (value instanceof Float) {
+      return FLOAT;
+    }
+    if (value instanceof Integer) {
+      return INT32;
+    }
+    if (value instanceof Long) {
+      return INT64;
+    }
+    if (value instanceof Boolean) {
+      return BOOL;
+    }
+    if (value instanceof String) {
+      return STRING;
+    }
+    if (value instanceof byte[]) {
+      return BYTES;
+    }
+    if (value instanceof Enum) {
+      return ENUM;
+    }
+    if (value instanceof Object) {
+      return MESSAGE;
+    }
+    throw new IllegalArgumentException("unable to express FieldType for value");
+  }
+
   @Override
   public String toString() {
     return name().toLowerCase();
@@ -46,11 +81,11 @@ public enum FieldType {
 
   String formatValue(Object value) {
     switch (this) {
-    case STRING:
-    case BYTES:
-      return String.format("\"%s\"", value);
-    default:
-      return value.toString();
+      case STRING:
+      case BYTES:
+        return String.format("\"%s\"", value);
+      default:
+        return value.toString();
     }
   }
 }
