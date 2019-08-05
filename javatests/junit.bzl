@@ -35,14 +35,14 @@ def _SafeIndex(l, val):
     return -1
 
 def _AsClassName(fname):
-    path_name = [x.path for x in fname.files][0]
+    path_name = [x.path for x in fname.files.to_list()][0]
     file_name = path_name.split("/")[-1]
     return ".".join([_PKG, file_name.split(".")[0]]) + ".class"
 
 def _impl(ctx):
     classes = ",".join(
         [_AsClassName(x) for x in ctx.attr.srcs])
-    ctx.file_action(output=ctx.outputs.out, content=_OUTPUT % (
+    ctx.actions.write(output=ctx.outputs.out, content=_OUTPUT % (
             classes, ctx.attr.outname))
 
 _GenSuite = rule(

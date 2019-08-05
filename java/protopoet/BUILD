@@ -28,7 +28,7 @@ java_library(
     deps = [
         ":proto_writer",
         ":usage_monitor",
-        "@bazel_common//third_party/java/guava",
+        "@google_bazel_common//third_party/java/guava",
     ],
 )
 
@@ -36,7 +36,7 @@ java_library(
     name = "line_wrapper",
     srcs = ["LineWrapper.java"],
     deps = [
-        "@bazel_common//third_party/java/guava",
+        "@google_bazel_common//third_party/java/guava",
     ],
 )
 
@@ -49,7 +49,7 @@ java_library(
         "UsedNameMonitor.java",
     ],
     deps = [
-        "@bazel_common//third_party/java/guava",
+        "@google_bazel_common//third_party/java/guava",
     ],
 )
 
@@ -61,7 +61,7 @@ java_library(
     ],
     deps = [
         ":line_wrapper",
-        "@bazel_common//third_party/java/guava",
+        "@google_bazel_common//third_party/java/guava",
     ],
 )
 
