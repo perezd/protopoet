@@ -16,13 +16,12 @@
 
 package protopoet;
 
-import java.util.function.Function;
 import java.util.HashSet;
+import java.util.function.Function;
 
 /**
- * Monitor class that helps language emitters keep track of used
- * names. Checkout {@link Useable} interface for particular APIs
- * that need to be configured to make use of this.
+ * Monitor class that helps language emitters keep track of used names. Checkout {@link Useable}
+ * interface for particular APIs that need to be configured to make use of this.
  */
 final class UsedNameMonitor {
 
@@ -30,13 +29,13 @@ final class UsedNameMonitor {
   private final HashSet<String> names = new HashSet<>();
 
   UsedNameMonitor(String usageContext) {
-    exceptionText = (candidateName) -> String.format("'%s' name already used in '%s'",
-                                                     candidateName, usageContext);
+    exceptionText =
+        (candidateName) ->
+            String.format("'%s' name already used in '%s'", candidateName, usageContext);
   }
 
   UsedNameMonitor() {
-    exceptionText = (candidateName) -> String.format("'%s' name already used",
-                                                     candidateName);
+    exceptionText = (candidateName) -> String.format("'%s' name already used", candidateName);
   }
 
   /** Adds a name that has been used to prevent future usages. */
@@ -50,9 +49,9 @@ final class UsedNameMonitor {
     names.clear();
   }
 
-  /** 
-   * Verifies tha ta name hasn't be used before with this instance of
-   * the monitor. Throws {@link UsageException} iif that is not true. 
+  /**
+   * Verifies that a name hasn't be used before with this instance of the monitor. Throws {@link
+   * UsageException} iif that is not true.
    */
   void ensureUnused(Useable.Name name) throws UsageException {
     String candidateName = name.name();

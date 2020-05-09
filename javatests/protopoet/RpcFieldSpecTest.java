@@ -28,25 +28,27 @@ public final class RpcFieldSpecTest {
   @Test
   public void testBasicField() {
     output
-      .expects("// comment\nrpc Test (Foo) returns (Bar);\n")
-      .produce(() ->
-               RpcFieldSpec.builder("Test")
-               .setFieldComment("comment")
-               .setRequestMessageName("Foo")
-               .setResponseMessageName("Bar")
-               .build());
+        .expects("// comment\nrpc Test (Foo) returns (Bar);\n")
+        .produce(
+            () ->
+                RpcFieldSpec.builder("Test")
+                    .setFieldComment("comment")
+                    .setRequestMessageName("Foo")
+                    .setResponseMessageName("Bar")
+                    .build());
   }
 
   @Test
   public void testStreamFields() {
     output
-      .expects("// comment\nrpc Test (stream Foo) returns (stream Bar);\n")
-      .produce(() ->
-               RpcFieldSpec.builder("Test")
-               .setFieldComment("comment")
-               .setRequestMessageName("Foo", true)
-               .setResponseMessageName("Bar", true)
-               .build());
+        .expects("// comment\nrpc Test (stream Foo) returns (stream Bar);\n")
+        .produce(
+            () ->
+                RpcFieldSpec.builder("Test")
+                    .setFieldComment("comment")
+                    .setRequestMessageName("Foo", true)
+                    .setResponseMessageName("Bar", true)
+                    .build());
   }
 
   @Test
@@ -66,14 +68,18 @@ public final class RpcFieldSpecTest {
   @Test
   public void testFieldOptions() {
     output
-      .expects("// comment\nrpc Test (Foo) returns (Bar) {\n  option (foo) = \"bar\";\n  option (baz) = true;\n}\n")
-      .produce(() ->
-               RpcFieldSpec.builder("Test")
-               .setFieldComment("comment")
-               .setRequestMessageName("Foo")
-               .setResponseMessageName("Bar")
-               .addFieldOptions(OptionSpec.builder(OptionType.METHOD, "foo").setValue(FieldType.STRING, "bar"),
-                                OptionSpec.builder(OptionType.METHOD, "baz").setValue(FieldType.BOOL, true))
-               .build());
+        .expects(
+            "// comment\nrpc Test (Foo) returns (Bar) {\n  option (foo) = \"bar\";\n  option (baz) = true;\n}\n")
+        .produce(
+            () ->
+                RpcFieldSpec.builder("Test")
+                    .setFieldComment("comment")
+                    .setRequestMessageName("Foo")
+                    .setResponseMessageName("Bar")
+                    .addFieldOptions(
+                        OptionSpec.builder(OptionType.METHOD, "foo")
+                            .setValue(FieldType.STRING, "bar"),
+                        OptionSpec.builder(OptionType.METHOD, "baz").setValue(FieldType.BOOL, true))
+                    .build());
   }
 }

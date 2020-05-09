@@ -26,10 +26,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Monitor class that helps language emitters keep track of used
- * and acceptable to use fields (by exclusion via reservations).
- * Checkout {@link Useable} interface for particular APIs that need
- * to be configured to make use of this.
+ * Monitor class that helps language emitters keep track of used and acceptable to use fields (by
+ * exclusion via reservations). Checkout {@link Useable} interface for particular APIs that need to
+ * be configured to make use of this.
  */
 final class UsedFieldMonitor {
 
@@ -39,14 +38,12 @@ final class UsedFieldMonitor {
 
   /** Adds a reservation of field names or numbers that should not be allowed for usage. */
   void add(Useable.FieldReservations usableFieldSet) throws UsageException {
-    Stream<Useable.Field> nums = usableFieldSet.asFieldNumberStream()
-      .mapToObj(this::toReservedField);
-    Stream<Useable.Field> names = usableFieldSet.asFieldNameStream()
-      .map(this::toReservedField);
+    Stream<Useable.Field> nums =
+        usableFieldSet.asFieldNumberStream().mapToObj(this::toReservedField);
+    Stream<Useable.Field> names = usableFieldSet.asFieldNameStream().map(this::toReservedField);
 
     // This form of iteration is required because we may throw an exception.
-    List<Useable.Field> resos = Streams.concat(nums, names)
-      .collect(Collectors.toList());
+    List<Useable.Field> resos = Streams.concat(nums, names).collect(Collectors.toList());
     for (Useable.Field reso : resos) {
       add(reso);
       // We must also record the reserved field number for double checking later.
@@ -62,8 +59,9 @@ final class UsedFieldMonitor {
     ensureUnused(useableField);
     // If we don't get a reliable field number back, we can use our unknown field number generator
     // to ensure we have unique bimap entries.
-    fields.put(useableField.fieldName(),
-               useableField.fieldNumber().orElseGet(unknownFieldNumberOffset::decrementAndGet));
+    fields.put(
+        useableField.fieldName(),
+        useableField.fieldNumber().orElseGet(unknownFieldNumberOffset::decrementAndGet));
   }
 
   /** Adds all fields found within a container/wrapper. */
@@ -82,14 +80,14 @@ final class UsedFieldMonitor {
     unknownFieldNumberOffset.set(0);
   }
 
-  /** 
-   * Verifies that a field hasn't be used before with this instance of
-   * the monitor. Throws {@link UsageException} iif that is not true.
+  /**
+   * Verifies that a field hasn't be used before with this instance of the monitor. Throws {@link
+   * UsageException} iif that is not true.
    */
   void ensureUnused(Useable.Field useableField) throws UsageException {
     String fieldName = useableField.fieldName();
     Optional<Integer> fieldNumber = useableField.fieldNumber();
-    
+
     // Ensure that a given field name isn't reused within this scope.
     if (fields.containsKey(fieldName)) {
       int usedFieldNumber = fields.get(fieldName);
@@ -97,8 +95,8 @@ final class UsedFieldMonitor {
         // If the number is negative (unknown) and has been positively captured
         // as a reserved field number, this is the message to display.
         if (reservedFieldNumbers.contains(usedFieldNumber)) {
-          throw new UsageException(String.format("field name '%s' is reserved and cannot be used",
-                                                 fieldName));
+          throw new UsageException(
+              String.format("field name '%s' is reserved and cannot be used", fieldName));
         } else {
           // Otherwise, its a reused field that does not have a number to verify, so we can
           // assert the field name has been used, regardless.
@@ -107,8 +105,10 @@ final class UsedFieldMonitor {
       } else {
         // In this case, the field name is not unique and we can actually tell
         // the user what field number is using the field.
-        throw new UsageException(String.format("field name '%s' (number=%d) not unique, used by field number %d",
-                                               fieldName, fieldNumber.get(), usedFieldNumber));
+        throw new UsageException(
+            String.format(
+                "field name '%s' (number=%d) not unique, used by field number %d",
+                fieldName, fieldNumber.get(), usedFieldNumber));
       }
     }
 
@@ -118,17 +118,18 @@ final class UsedFieldMonitor {
     }
 
     // Ensure that a given field number isn't reused within this scope.
-    int fieldNum = fieldNumber.get();    
+    int fieldNum = fieldNumber.get();
     if (fields.containsValue(fieldNum)) {
       String usedFieldName = fields.inverse().get(fieldNum);
       if (usedFieldName.startsWith("__RESERVED_")) {
-        throw new UsageException(String.format("field number %d is reserved and cannot be used",
-                                               fieldNum));
+        throw new UsageException(
+            String.format("field number %d is reserved and cannot be used", fieldNum));
       } else {
-        throw new UsageException(String.format("field number %d already used by field named '%s'",
-                                            fieldNum, usedFieldName));
+        throw new UsageException(
+            String.format(
+                "field number %d already used by field named '%s'", fieldNum, usedFieldName));
       }
-    }        
+    }
   }
 
   UsedFieldMonitor() {}

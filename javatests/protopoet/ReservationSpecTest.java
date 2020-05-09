@@ -31,36 +31,33 @@ public final class ReservationSpecTest {
 
   @Rule public final ExpectedException thrown = ExpectedException.none();
   @Rule public final ExpectedOutput output = ExpectedOutput.none();
-  
+
   @Test
   public void testFieldNumberReservations() {
     output
-      .expects("// hello\nreserved 1, 2, 3, 5, 8;\n")
-      .produce(() ->
-               ReservationSpec.builder(1, 2, 3, 5, 8)
-               .setReservationComment("hello")
-               .build());
+        .expects("// hello\nreserved 1, 2, 3, 5, 8;\n")
+        .produce(
+            () -> ReservationSpec.builder(1, 2, 3, 5, 8).setReservationComment("hello").build());
   }
 
   @Test
   public void testFieldNameReservations() {
     output
-      .expects("// hello\nreserved \"foo\", \"bar\";\n")
-      .produce(() ->
-               ReservationSpec.builder("foo", "bar")
-               .setReservationComment("hello")
-               .build());
+        .expects("// hello\nreserved \"foo\", \"bar\";\n")
+        .produce(
+            () -> ReservationSpec.builder("foo", "bar").setReservationComment("hello").build());
   }
 
   @Test
   public void testFieldNumberRanges() {
     output
-      .expects("// hello\nreserved 1, 2, 3, 4 to 8, 9 to 10;\n")
-      .produce(()-> ReservationSpec.builder(1,2,3)
-               .setReservationComment("hello")
-               .addRanges(FieldRange.of(4, 8),
-                          FieldRange.of(9, 10))
-               .build());
+        .expects("// hello\nreserved 1, 2, 3, 4 to 8, 9 to 10;\n")
+        .produce(
+            () ->
+                ReservationSpec.builder(1, 2, 3)
+                    .setReservationComment("hello")
+                    .addRanges(FieldRange.of(4, 8), FieldRange.of(9, 10))
+                    .build());
   }
 
   @Test
@@ -68,10 +65,9 @@ public final class ReservationSpecTest {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("ranges are only allowed when reserving field numbers");
     ReservationSpec.builder("should", "fail")
-      .addRanges(FieldRange.of(4, 8),
-                 FieldRange.of(9, 10))
-      .build()
-      .emit(ProtoWriter.dud());
+        .addRanges(FieldRange.of(4, 8), FieldRange.of(9, 10))
+        .build()
+        .emit(ProtoWriter.dud());
   }
 
   @Test
@@ -83,22 +79,23 @@ public final class ReservationSpecTest {
 
   @Test
   public void testTagNumberStream() {
-    IntStream tagNumStream = ReservationSpec.builder(1, 2, 3)
-      .addRanges(FieldRange.of(10, 15),
-                 FieldRange.of(5, 8))
-      .build()
-      .asFieldNumberStream()
-      .sorted();
+    IntStream tagNumStream =
+        ReservationSpec.builder(1, 2, 3)
+            .addRanges(FieldRange.of(10, 15), FieldRange.of(5, 8))
+            .build()
+            .asFieldNumberStream()
+            .sorted();
     assertThat(tagNumStream.toArray())
-      .isEqualTo(new int[]{1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15});
+        .isEqualTo(new int[] {1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15});
   }
 
   @Test
   public void testFieldNameStream() {
-    List<String> fieldNames = ReservationSpec.builder("a", "b", "c")
-      .build()
-      .asFieldNameStream()
-      .collect(Collectors.toList());
+    List<String> fieldNames =
+        ReservationSpec.builder("a", "b", "c")
+            .build()
+            .asFieldNameStream()
+            .collect(Collectors.toList());
     assertThat(Arrays.asList("a", "b", "c")).isEqualTo(fieldNames);
   }
 

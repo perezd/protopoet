@@ -1,4 +1,3 @@
-
 load("//javatests:junit.bzl", "junit_tests")
 
 junit_tests(

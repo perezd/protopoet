@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableList;
 import java.io.IOException;
 
 /**
- * Defines a message in the Protocol Buffer language.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#message_definition
+ * Defines a message in the Protocol Buffer language. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#message_definition
  */
 public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Useable.Name {
 
@@ -41,7 +41,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
   private final ImmutableList<OptionSpec> options;
   private final UsedFieldMonitor usedFieldMonitor = new UsedFieldMonitor();
   private final UsedNameMonitor usedNameMonitor;
-  
+
   private MessageSpec(Builder builder) {
     messageName = builder.messageName;
     messageComment = ImmutableList.copyOf(builder.messageComment);
@@ -62,9 +62,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
 
     // Options are hoisted to the very top of the message for clarity/consistency.
     if (!options.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (OptionSpec option : options) {
         option.emit(writer);
       }
@@ -74,9 +72,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
     // Reservations are hoisted to the top as well, and added to the UsedFieldMonitor
     // first so we can track if the following src blocks accidentally use them.
     if (!reservations.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (ReservationSpec reservation : reservations) {
         try {
           usedFieldMonitor.add(reservation);
@@ -107,7 +103,7 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
             usedFieldMonitor.add((Useable.Fields) emittable);
           }
         } catch (UsageException ex) {
-            throw new IOException(ex);
+          throw new IOException(ex);
         }
         writer.indent();
         emittable.emit(writer);
@@ -153,10 +149,11 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
 
     /** Adds enums to the inside of the message, see {@link EnumSpec}. */
     public Builder addEnums(Iterable<? extends Buildable<EnumSpec>> enums) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(enums)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(enums)))
+              .build();
       return this;
     }
 
@@ -168,10 +165,11 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
 
     /** Adds field reservations for the message, see {@link ReservationSpec}. */
     public Builder addReservations(Iterable<? extends Buildable<ReservationSpec>> resos) {
-      reservations = ImmutableList.<ReservationSpec>builder()
-        .addAll(reservations)
-        .addAll(Buildables.buildAll(resos))
-        .build();
+      reservations =
+          ImmutableList.<ReservationSpec>builder()
+              .addAll(reservations)
+              .addAll(Buildables.buildAll(resos))
+              .build();
       return this;
     }
 
@@ -182,10 +180,11 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
 
     /** Adds inner messages to a message. */
     public Builder addMessages(Iterable<? extends Buildable<MessageSpec>> msgs) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(msgs)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(msgs)))
+              .build();
       return this;
     }
 
@@ -196,16 +195,17 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
 
     /** Adds message fields to the message. see {@link MessageFieldSpec}. */
     public Builder addMessageFields(Iterable<? extends Buildable<MessageField>> fields) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(fields)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(fields)))
+              .build();
       return this;
     }
 
-    /** 
-     * Adds message field to the message. 
-     * see {@link MessageFieldSpec}, {@link OneofFieldSpec}, and {@link MapFieldSpec}.
+    /**
+     * Adds message field to the message. see {@link MessageFieldSpec}, {@link OneofFieldSpec}, and
+     * {@link MapFieldSpec}.
      */
     public Builder addMessageFields(Buildable<MessageField>... fields) {
       return addMessageFields(ImmutableList.copyOf(fields));
@@ -213,12 +213,17 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
 
     /** Adds options to the message. See {@link OptionSpec}. */
     public Builder addMessageOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.MESSAGE,
-                                                        "option must be message type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.MESSAGE,
+                              "option must be message type")))
+              .build();
       return this;
     }
 
@@ -227,10 +232,10 @@ public final class MessageSpec implements Emittable, Buildable<MessageSpec>, Use
       return addMessageOptions(ImmutableList.copyOf(options));
     }
 
-    /** Builds a new instance of {@link MessageSpec}.*/
+    /** Builds a new instance of {@link MessageSpec}. */
     @Override
     public MessageSpec build() {
       return new MessageSpec(this);
-    }    
+    }
   }
 }

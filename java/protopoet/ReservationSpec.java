@@ -28,10 +28,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Models the concept of a Reservation in Protocol Buffers API.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#reserved
+ * Models the concept of a Reservation in Protocol Buffers API. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#reserved
  */
-public final class ReservationSpec implements Emittable, Useable.FieldReservations, Buildable<ReservationSpec> {
+public final class ReservationSpec
+    implements Emittable, Useable.FieldReservations, Buildable<ReservationSpec> {
 
   /** Creates a builder for a {@link ReservationSpec} using field numbers. */
   public static Builder builder(Integer... fieldNumbers) {
@@ -72,7 +73,9 @@ public final class ReservationSpec implements Emittable, Useable.FieldReservatio
     return this;
   }
 
-  /** Returns a flattened stream of distinct field numbers that are represented  by this reservation. */
+  /**
+   * Returns a flattened stream of distinct field numbers that are represented by this reservation.
+   */
   @Override
   public IntStream asFieldNumberStream() {
     IntStream numbers = fieldNumbers.stream().mapToInt(Integer::intValue);
@@ -93,7 +96,7 @@ public final class ReservationSpec implements Emittable, Useable.FieldReservatio
     private final ImmutableList<String> fieldNames;
     private ImmutableList<String> reservationComment = ImmutableList.of();
     private ImmutableList<FieldRange> fieldNumberRanges = ImmutableList.of();
-    
+
     private Builder(ImmutableList<String> fieldNames, ImmutableList<Integer> fieldNumbers) {
       boolean allNumbersPositive = fieldNumbers.stream().noneMatch(n -> n <= 0);
       checkArgument(allNumbersPositive, "negative field numbers are invalid");
@@ -112,17 +115,19 @@ public final class ReservationSpec implements Emittable, Useable.FieldReservatio
       return setReservationComment(ImmutableList.copyOf(lines));
     }
 
-    /** Appends a field number range to the reservation, only valid for field number reservations. */
+    /**
+     * Appends a field number range to the reservation, only valid for field number reservations.
+     */
     public Builder addRanges(Iterable<FieldRange> rngs) {
       checkState(fieldNames.isEmpty(), "ranges are only allowed when reserving field numbers");
-      fieldNumberRanges = ImmutableList.<FieldRange>builder()
-        .addAll(fieldNumberRanges)
-        .addAll(rngs)
-        .build();
+      fieldNumberRanges =
+          ImmutableList.<FieldRange>builder().addAll(fieldNumberRanges).addAll(rngs).build();
       return this;
     }
 
-    /** Appends a field number range to the reservation, only valid for field number reservations. */
+    /**
+     * Appends a field number range to the reservation, only valid for field number reservations.
+     */
     public Builder addRanges(FieldRange... rngs) {
       return addRanges(ImmutableList.copyOf(rngs));
     }

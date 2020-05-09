@@ -45,6 +45,6 @@ public final class FieldRange {
   }
 
   IntStream asStream() {
-    return IntStream.range(this.lo, this.hi+1);
+    return IntStream.range(this.lo, this.hi + 1);
   }
 }

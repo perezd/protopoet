@@ -17,5 +17,7 @@
 package protopoet;
 
 final class UsageException extends Throwable {
-  UsageException(String msg) { super(msg); }
+  UsageException(String msg) {
+    super(msg);
+  }
 }

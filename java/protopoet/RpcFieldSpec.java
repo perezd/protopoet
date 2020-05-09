@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Defines an RPC field for use with {@link ServiceSpec}.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#service_definition
+ * Defines an RPC field for use with {@link ServiceSpec}. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#service_definition
  */
 public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<RpcFieldSpec> {
 
@@ -43,7 +43,7 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
   private final ImmutableList<String> fieldComment;
   private final ImmutableMap<FieldPart, Map<String, Boolean>> fieldParts;
   private final ImmutableList<OptionSpec> options;
-  
+
   private RpcFieldSpec(Builder builder) {
     fieldName = builder.fieldName;
     fieldComment = ImmutableList.copyOf(builder.fieldComment);
@@ -55,11 +55,11 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
   public void emit(ProtoWriter writer) throws IOException {
     if (!fieldComment.isEmpty()) {
       writer.emitComment(fieldComment);
-    }    
-    writer.emit(String.format("rpc %s (%s) returns (%s)",
-                              fieldName,
-                              formatFieldPart(FieldPart.REQUEST),
-                              formatFieldPart(FieldPart.RESPONSE)));
+    }
+    writer.emit(
+        String.format(
+            "rpc %s (%s) returns (%s)",
+            fieldName, formatFieldPart(FieldPart.REQUEST), formatFieldPart(FieldPart.RESPONSE)));
 
     if (options.isEmpty()) {
       writer.emit(";\n");
@@ -69,9 +69,7 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
     for (OptionSpec option : options) {
       option.emit(writer);
     }
-    writer
-      .unindent()
-      .emit("}\n");
+    writer.unindent().emit("}\n");
   }
 
   @Override
@@ -90,12 +88,10 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
   }
 
   private String formatFieldPart(FieldPart fieldPart) {
-    return fieldParts.get(fieldPart)
-      .entrySet()
-      .stream()
-      .map(entry -> String.format("%s%s", entry.getValue() ? "stream " : "", entry.getKey()))
-      .findFirst()
-      .orElseThrow(() -> new IllegalStateException("expected a field part"));
+    return fieldParts.get(fieldPart).entrySet().stream()
+        .map(entry -> String.format("%s%s", entry.getValue() ? "stream " : "", entry.getKey()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("expected a field part"));
   }
 
   /** Builder for producing new instances of {@link RpcFieldSpec}. */
@@ -105,18 +101,18 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
     private ImmutableMap<FieldPart, Map<String, Boolean>> fieldParts = ImmutableMap.of();
     private ImmutableList<String> fieldComment = ImmutableList.of();
     private ImmutableList<OptionSpec> options = ImmutableList.of();
-    
+
     private Builder(String fieldName) {
       this.fieldName = fieldName;
     }
 
-    /** Declares a comment for the field.*/
+    /** Declares a comment for the field. */
     public Builder setFieldComment(Iterable<String> lines) {
       this.fieldComment = ImmutableList.copyOf(lines);
       return this;
     }
 
-    /** Declares a comment for the field.*/
+    /** Declares a comment for the field. */
     public Builder setFieldComment(String... lines) {
       return setFieldComment(ImmutableList.copyOf(lines));
     }
@@ -127,8 +123,8 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
     }
 
     /**
-     * Declares the message name for the request part of the field and 
-     * signals if this part of the rpc is streaming.
+     * Declares the message name for the request part of the field and signals if this part of the
+     * rpc is streaming.
      */
     public Builder setRequestMessageName(String messageName, boolean isStreaming) {
       fieldParts = newFieldParts(FieldPart.REQUEST, messageName, isStreaming);
@@ -141,8 +137,8 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
     }
 
     /**
-     * Declares the message name for the response part of the field and 
-     * signals if this part of the rpc is streaming.
+     * Declares the message name for the response part of the field and signals if this part of the
+     * rpc is streaming.
      */
     public Builder setResponseMessageName(String messageName, boolean isStreaming) {
       fieldParts = newFieldParts(FieldPart.RESPONSE, messageName, isStreaming);
@@ -151,12 +147,16 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
 
     /** Adds options to the field. See {@link OptionSpec}. */
     public Builder addFieldOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.METHOD,
-                                                        "option must be method type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.METHOD, "option must be method type")))
+              .build();
       return this;
     }
 
@@ -167,16 +167,15 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
     }
 
     /** Builds a new instance of {@link RpcFieldSpec}. */
-    @Override 
+    @Override
     public RpcFieldSpec build() {
       checkState(fieldParts.containsKey(FieldPart.REQUEST), "request message must be set");
       checkState(fieldParts.containsKey(FieldPart.RESPONSE), "response message must be set");
       return new RpcFieldSpec(this);
     }
 
-    private ImmutableMap<FieldPart, Map<String, Boolean>> newFieldParts(FieldPart fieldPart,
-                                                                        String messageName,
-                                                                        boolean isStreaming) {
+    private ImmutableMap<FieldPart, Map<String, Boolean>> newFieldParts(
+        FieldPart fieldPart, String messageName, boolean isStreaming) {
       Map<FieldPart, Map<String, Boolean>> newPart = Maps.newHashMap(fieldParts);
       newPart.put(fieldPart, ImmutableMap.of(messageName, isStreaming));
       return ImmutableMap.copyOf(newPart);
@@ -185,6 +184,7 @@ public final class RpcFieldSpec implements Useable.Field, Emittable, Buildable<R
 
   // Identifiers for designating the two primary parts of an rpc field.
   private enum FieldPart {
-    REQUEST, RESPONSE
+    REQUEST,
+    RESPONSE
   }
 }

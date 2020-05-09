@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 /**
- * Defines a oneof field for use with any type that implements {@link MessageField}.
- * Learn more: https://developers.google.com/protocol-buffers/docs/proto3#using-oneof
+ * Defines a oneof field for use with any type that implements {@link MessageField}. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/proto3#using-oneof
  */
 public final class OneofFieldSpec implements MessageField, Useable.Fields {
 
@@ -47,7 +47,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
     fields = ImmutableList.copyOf(builder.fields);
     options = ImmutableList.copyOf(builder.options);
   }
-  
+
   @Override
   public void emit(ProtoWriter writer) throws IOException {
     if (!fieldComment.isEmpty()) {
@@ -57,9 +57,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
 
     // Options are hoisted to the very top of the enum for clarity/consistency.
     if (!options.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (OptionSpec option : options) {
         option.emit(writer);
       }
@@ -70,9 +68,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
     // Note that, we don't use a field monitor here, instead,
     // we propagate/delegate that to the parent entity.
     if (!fields.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (MessageField field : fields) {
         field.emit(writer);
       }
@@ -92,7 +88,7 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
     // which are both by definition useable in the scope this field
     // may be used within, so its safe to assume we can propagate them
     // to a used field monitor without worry.
-    return fields.stream().map(f -> (Useable.Field) f).collect(Collectors.toList());
+    return fields.stream().map(Useable.Field.class::cast).collect(Collectors.toList());
   }
 
   @Override
@@ -123,32 +119,39 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
       return setFieldComment(ImmutableList.copyOf(lines));
     }
 
-    /** Adds fields to the oneof. See {@link MessageFieldSpec}. Maps and oneofs are not supported. */
+    /**
+     * Adds fields to the oneof. See {@link MessageFieldSpec}. Maps and oneofs are not supported.
+     */
     public Builder addMessageFields(Iterable<? extends Buildable<MessageField>> fields) {
       Iterable<MessageField> oneofFields = Buildables.buildAll(fields);
       for (MessageField field : oneofFields) {
         // Spec says map fields are now allowed, specifically.
-        checkState(!(field instanceof MapFieldSpec), "map field '%s' not allowed in oneof", field.fieldName());
+        checkState(
+            !(field instanceof MapFieldSpec),
+            "map field '%s' not allowed in oneof",
+            field.fieldName());
         // Verify a recursive oneof isn't happening.
-        checkState(!(field instanceof OneofFieldSpec),
-                   String.format("immediate inner oneof field '%s' disallowed", field.fieldName()));
+        checkState(
+            !(field instanceof OneofFieldSpec),
+            String.format("immediate inner oneof field '%s' disallowed", field.fieldName()));
 
         // Spec says repeated fields are not allowed, specifically.
         if (field instanceof MessageFieldSpec) {
           MessageFieldSpec msgField = (MessageFieldSpec) field;
-          checkState(!msgField.isRepeated(),
-                     String.format("repeated field '%s' not allowed in oneof", msgField.fieldName()));
+          checkState(
+              !msgField.isRepeated(),
+              String.format("repeated field '%s' not allowed in oneof", msgField.fieldName()));
         }
       }
 
-      this.fields = ImmutableList.<MessageField>builder()
-        .addAll(this.fields)
-        .addAll(oneofFields)
-        .build();
+      this.fields =
+          ImmutableList.<MessageField>builder().addAll(this.fields).addAll(oneofFields).build();
       return this;
     }
 
-    /** Adds fields to the oneof. See {@link MessageFieldSpec}. Maps and oneofs are not supported. */
+    /**
+     * Adds fields to the oneof. See {@link MessageFieldSpec}. Maps and oneofs are not supported.
+     */
     @SafeVarargs
     public final Builder addMessageFields(Buildable<MessageField>... fields) {
       return addMessageFields(ImmutableList.copyOf(fields));
@@ -156,12 +159,16 @@ public final class OneofFieldSpec implements MessageField, Useable.Fields {
 
     /** Adds options to the oneof. See {@link OptionSpec}. */
     public Builder addOneofOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.ONEOF,
-                                                        "option must be oneof type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.ONEOF, "option must be oneof type")))
+              .build();
       return this;
     }
 

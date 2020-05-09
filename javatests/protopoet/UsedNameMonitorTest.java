@@ -26,7 +26,7 @@ public final class UsedNameMonitorTest {
   @Rule public final ExpectedException thrown = ExpectedException.none();
 
   private UsedNameMonitor monitor;
-  
+
   @Before
   public void setUp() {
     monitor = new UsedNameMonitor("test");
@@ -39,7 +39,7 @@ public final class UsedNameMonitorTest {
     monitor.add(() -> "foo");
     monitor.ensureUnused(() -> "foo");
   }
-  
+
   @Test
   public void testResetNameUsable() throws UsageException {
     monitor.add(() -> "foo");

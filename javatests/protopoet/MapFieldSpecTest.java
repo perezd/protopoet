@@ -16,7 +16,6 @@
 
 package protopoet;
 
-
 import java.io.IOException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,56 +41,60 @@ public final class MapFieldSpecTest {
   @Test
   public void testBasicField() {
     output
-      .expects("// comment\nmap<string, string> strmap = 1;\n")
-      .produce(() ->
-               MapFieldSpec.builder(FieldType.STRING, FieldType.STRING, "strmap", 1)
-               .setFieldComment("comment")
-               .build());
+        .expects("// comment\nmap<string, string> strmap = 1;\n")
+        .produce(
+            () ->
+                MapFieldSpec.builder(FieldType.STRING, FieldType.STRING, "strmap", 1)
+                    .setFieldComment("comment")
+                    .build());
   }
 
   @Test
   public void testCustomTypeNameFieldMessage() {
     output
-      .expects("// comment\nmap<string, Foo> test = 1;\n")
-      .produce(() ->
-               MapFieldSpec.builder(FieldType.STRING, FieldType.MESSAGE, "test", 1)
-               .setFieldComment("comment")
-               .setCustomTypeName("Foo")
-               .build());
+        .expects("// comment\nmap<string, Foo> test = 1;\n")
+        .produce(
+            () ->
+                MapFieldSpec.builder(FieldType.STRING, FieldType.MESSAGE, "test", 1)
+                    .setFieldComment("comment")
+                    .setCustomTypeName("Foo")
+                    .build());
   }
 
   @Test
   public void testCustomTypeNameFieldEnum() {
     output
-      .expects("// comment\nmap<string, Foo> test = 1;\n")
-      .produce(() ->
-               MapFieldSpec.builder(FieldType.STRING, FieldType.ENUM, "test", 1)
-               .setFieldComment("comment")
-               .setCustomTypeName("Foo")
-               .build());
+        .expects("// comment\nmap<string, Foo> test = 1;\n")
+        .produce(
+            () ->
+                MapFieldSpec.builder(FieldType.STRING, FieldType.ENUM, "test", 1)
+                    .setFieldComment("comment")
+                    .setCustomTypeName("Foo")
+                    .build());
   }
- 
+
   @Test
   public void testExceptionCustomTypeNameUsage() throws IOException {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("custom type names only supported for MESSAGE and ENUM value types");
     MapFieldSpec.builder(FieldType.STRING, FieldType.DOUBLE, "test", 1)
-      .setCustomTypeName("Foo")
-      .build()
-      .emit(ProtoWriter.dud());    
+        .setCustomTypeName("Foo")
+        .build()
+        .emit(ProtoWriter.dud());
   }
-
 
   @Test
   public void testWritingOptions() {
     output
-      .expects("// comment\nmap<string, Foo> test = 1 [(foo) = true, (bar) = 23];\n")
-      .produce(() ->
-               MapFieldSpec.builder(FieldType.STRING, FieldType.ENUM, "test", 1)
-               .setFieldComment("comment")
-               .setCustomTypeName("Foo")
-               .addFieldOptions(OptionSpec.builder(OptionType.FIELD, "foo").setValue(FieldType.BOOL, true),
-                                OptionSpec.builder(OptionType.FIELD, "bar").setValue(FieldType.INT32, 23))
-               .build());
+        .expects("// comment\nmap<string, Foo> test = 1 [(foo) = true, (bar) = 23];\n")
+        .produce(
+            () ->
+                MapFieldSpec.builder(FieldType.STRING, FieldType.ENUM, "test", 1)
+                    .setFieldComment("comment")
+                    .setCustomTypeName("Foo")
+                    .addFieldOptions(
+                        OptionSpec.builder(OptionType.FIELD, "foo").setValue(FieldType.BOOL, true),
+                        OptionSpec.builder(OptionType.FIELD, "bar").setValue(FieldType.INT32, 23))
+                    .build());
   }
 }

@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableList;
 import java.io.IOException;
 
 /**
- * Defines a Service in the Protocol Buffer language.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#service_definition
+ * Defines a Service in the Protocol Buffer language. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#service_definition
  */
 public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Useable.Name {
 
@@ -57,9 +57,7 @@ public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Use
 
     // Options are hoisted to the very top of the service for clarity/consistency.
     if (!options.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (OptionSpec option : options) {
         option.emit(writer);
       }
@@ -67,9 +65,7 @@ public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Use
     }
 
     if (!rpcFields.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (RpcFieldSpec field : rpcFields) {
         try {
           usedFieldMonitor.add(field);
@@ -118,10 +114,11 @@ public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Use
 
     /** Adds an rpc field to the service, see {@link RpcFieldSpec}. */
     public Builder addRpcFields(Iterable<? extends Buildable<RpcFieldSpec>> rpcFields) {
-      this.rpcFields = ImmutableList.<RpcFieldSpec>builder()
-        .addAll(this.rpcFields)
-        .addAll(Buildables.buildAll(rpcFields))
-        .build();
+      this.rpcFields =
+          ImmutableList.<RpcFieldSpec>builder()
+              .addAll(this.rpcFields)
+              .addAll(Buildables.buildAll(rpcFields))
+              .build();
       return this;
     }
 
@@ -133,12 +130,17 @@ public final class ServiceSpec implements Emittable, Buildable<ServiceSpec>, Use
 
     /** Adds options to the service. See {@link OptionSpec}. */
     public Builder addServiceOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.SERVICE,
-                                                        "option must be service type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.SERVICE,
+                              "option must be service type")))
+              .build();
       return this;
     }
 

@@ -16,9 +16,9 @@
 
 package protopoet;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import java.util.Optional;
 
 /** Designed to be used in conjunction with {@link UsedFieldMonitor} or {@link UsedNameMonitor}. */
 interface Useable {
@@ -29,9 +29,9 @@ interface Useable {
     /** Provides the name of a field. */
     String fieldName();
 
-    /** 
-     * Note, field numbers are not always required (RPC fields, for instance), but should
-     * be made available whenever possible to ensure they are not accidentally reused.
+    /**
+     * Note, field numbers are not always required (RPC fields, for instance), but should be made
+     * available whenever possible to ensure they are not accidentally reused.
      */
     Optional<Integer> fieldNumber();
   }

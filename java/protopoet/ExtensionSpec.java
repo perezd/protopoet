@@ -24,17 +24,22 @@ import java.io.IOException;
 
 /**
  * Models an Extension using proto3 syntax.
- * <p>NOTE: Extensions are not an officially supported concept in proto3,
- * but they are allowed to support the concept of Custom Options.
- * Learn more here: https://developers.google.com/protocol-buffers/docs/proto3#custom_options
+ *
+ * <p>NOTE: Extensions are not an officially supported concept in proto3, but they are allowed to
+ * support the concept of Custom Options. Learn more here:
+ * https://developers.google.com/protocol-buffers/docs/proto3#custom_options
  */
-public final class ExtensionSpec implements Emittable, Buildable<ExtensionSpec>, Importable, Useable.Name {
+public final class ExtensionSpec
+    implements Emittable, Buildable<ExtensionSpec>, Importable, Useable.Name {
 
-  /** Only building custom options is supported with {@link ExtensionSpec}. See {@link OptionType}. */
+  /**
+   * Only building custom options is supported with {@link ExtensionSpec}. See {@link OptionType}.
+   */
   public static Builder builder(OptionType optionType) {
     checkNotNull(optionType, "option type may not be null");
-    return new Builder(optionType.optionClassName,
-                       ImmutableList.of(ImportSpec.of("google/protobuf/descriptor.proto")));
+    return new Builder(
+        optionType.optionClassName,
+        ImmutableList.of(ImportSpec.of("google/protobuf/descriptor.proto")));
   }
 
   private final String extensionName;
@@ -61,9 +66,7 @@ public final class ExtensionSpec implements Emittable, Buildable<ExtensionSpec>,
     // tracking the used fields to prevent duplicate field names or numbers.
     writer.emit(String.format("extend %s {", extensionName));
     if (!extensionFields.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (MessageField extensionField : extensionFields) {
         try {
           // Verify regular fields.
@@ -119,23 +122,28 @@ public final class ExtensionSpec implements Emittable, Buildable<ExtensionSpec>,
       return setExtensionComment(ImmutableList.copyOf(lines));
     }
 
-    /** 
-     * Adds fields to the extension. See {@link MessageFieldSpec}. 
-     * NOTE: oneofs and maps are not allowed as extension fields.
+    /**
+     * Adds fields to the extension. See {@link MessageFieldSpec}. NOTE: oneofs and maps are not
+     * allowed as extension fields.
      */
     public Builder addExtensionFields(Iterable<? extends Buildable<MessageField>> fields) {
-      extensionFields = ImmutableList.<MessageField>builder()
-        .addAll(extensionFields)
-        .addAll(Buildables.buildAll(fields, field ->
-                                   checkArgument(field instanceof MessageFieldSpec,
-                                                 "complex fields not allowed (eg: oneofs or maps)")))
-        .build();
+      extensionFields =
+          ImmutableList.<MessageField>builder()
+              .addAll(extensionFields)
+              .addAll(
+                  Buildables.buildAll(
+                      fields,
+                      field ->
+                          checkArgument(
+                              field instanceof MessageFieldSpec,
+                              "complex fields not allowed (eg: oneofs or maps)")))
+              .build();
       return this;
     }
 
-    /** 
-     * Adds fields to the extension. See {@link MessageFieldSpec}. 
-     * NOTE: oneofs and maps are not allowed as extension fields.
+    /**
+     * Adds fields to the extension. See {@link MessageFieldSpec}. NOTE: oneofs and maps are not
+     * allowed as extension fields.
      */
     @SafeVarargs
     public final Builder addExtensionFields(Buildable<MessageField>... fields) {

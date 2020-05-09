@@ -16,11 +16,10 @@
 
 package protopoet;
 
-/** 
- * Message fields are unique because they can be standard fields, oneof fields, or maps.
- * This is a type system hack to allow them to all polymorphically work seamlessly together
- * in a single statement. 
- * See {@link MessageFieldSpec}, {@link OneofFieldSpec}, and {@link MapFieldSpec}.
+/**
+ * Message fields are unique because they can be standard fields, oneof fields, or maps. This is a
+ * type system hack to allow them to all polymorphically work seamlessly together in a single
+ * statement. See {@link MessageFieldSpec}, {@link OneofFieldSpec}, and {@link MapFieldSpec}.
  */
 public interface MessageField extends Emittable, Buildable<MessageField> {
   /** Provides the defined name for a message field. */

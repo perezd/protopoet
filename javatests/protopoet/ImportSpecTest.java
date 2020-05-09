@@ -22,7 +22,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import protopoet.ImportSpec.Modifier;
-  
+
 public final class ImportSpecTest {
 
   private StringBuilder out;
@@ -33,7 +33,7 @@ public final class ImportSpecTest {
     this.out = new StringBuilder();
     this.protoWriter = new ProtoWriter(out);
   }
-  
+
   @Test
   public void writeBasicImport() throws IOException {
     ImportSpec.of("other.proto").emit(protoWriter);

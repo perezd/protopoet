@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Implements spec for the import statement of the Protocol Buffer language.
- * more info: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#import_statement
+ * Implements spec for the import statement of the Protocol Buffer language. more info:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#import_statement
  */
 public final class ImportSpec implements Buildable<ImportSpec> {
 
@@ -32,9 +32,9 @@ public final class ImportSpec implements Buildable<ImportSpec> {
     NONE(" "),
     WEAK(" weak "),
     PUBLIC(" public ");
-      
+
     final String value;
-      
+
     Modifier(String value) {
       this.value = value;
     }
@@ -52,7 +52,7 @@ public final class ImportSpec implements Buildable<ImportSpec> {
 
   private final Modifier modifier;
   private final String path;
-  
+
   private ImportSpec(Modifier modifier, String path) {
     checkArgument(path.endsWith(".proto"), "path must be a file ending with .proto");
     this.modifier = modifier;
@@ -60,9 +60,7 @@ public final class ImportSpec implements Buildable<ImportSpec> {
   }
 
   public void emit(ProtoWriter writer) throws IOException {
-    writer
-      .emit(String.format("import%s\"%s\";", modifier.value, path))
-      .emit("\n");
+    writer.emit(String.format("import%s\"%s\";", modifier.value, path)).emit("\n");
   }
 
   @Override
@@ -91,8 +89,7 @@ public final class ImportSpec implements Buildable<ImportSpec> {
     }
     // field comparison
     ImportSpec spec = (ImportSpec) obj;
-    return Objects.equals(modifier, spec.modifier)
-            && Objects.equals(path, spec.path);
+    return Objects.equals(modifier, spec.modifier) && Objects.equals(path, spec.path);
   }
 
   String path() {

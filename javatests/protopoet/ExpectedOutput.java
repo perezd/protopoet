@@ -27,9 +27,9 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-/** 
- * Simple utility rule that eliminates standard boilerplate for comparing the output
- * of an emittable to a string literal or convention-based testdata.
+/**
+ * Simple utility rule that eliminates standard boilerplate for comparing the output of an emittable
+ * to a string literal or convention-based testdata.
  */
 public final class ExpectedOutput implements TestRule {
 
@@ -77,14 +77,15 @@ public final class ExpectedOutput implements TestRule {
           } else {
             throw new IllegalStateException("no output value configured");
           }
-          assertThat(out.toString()).isEqualTo(realOutputValue);  
+          assertThat(out.toString()).isEqualTo(realOutputValue);
         }
       }
     };
   }
 
   private String testDataName(Description description) {
-    return String.format("%s_%s", description.getTestClass().getSimpleName(), description.getMethodName());
+    return String.format(
+        "%s_%s", description.getTestClass().getSimpleName(), description.getMethodName());
   }
 
   private static String resourceAsString(String resName) throws IOException {

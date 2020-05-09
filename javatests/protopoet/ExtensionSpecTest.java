@@ -25,28 +25,31 @@ public final class ExtensionSpecTest {
 
   @Rule public final ExpectedException thrown = ExpectedException.none();
   @Rule public final ExpectedOutput output = ExpectedOutput.none();
-  
+
   @Test
   public void testWritingEmptyExtensionWithComment() {
-   output
-     .expects("// this is a comment\nextend google.protobuf.FileOptions {}\n")
-     .produce(() ->
-              ExtensionSpec.builder(OptionType.FILE)
-              .setExtensionComment("this is a comment")
-              .build());
+    output
+        .expects("// this is a comment\nextend google.protobuf.FileOptions {}\n")
+        .produce(
+            () ->
+                ExtensionSpec.builder(OptionType.FILE)
+                    .setExtensionComment("this is a comment")
+                    .build());
   }
 
   @Test
   public void testWritingFields() {
     output
-      .expectsTestData()
-      .produce(() ->
-               ExtensionSpec.builder(OptionType.SERVICE)
-               .setExtensionComment("comment")
-               .addExtensionFields(MessageFieldSpec.builder(FieldType.STRING, "test", 1),
-                                   MessageFieldSpec.builder(FieldType.BOOL, "bar", 2)
-                                   .setFieldComment("comment"))
-               .build());
+        .expectsTestData()
+        .produce(
+            () ->
+                ExtensionSpec.builder(OptionType.SERVICE)
+                    .setExtensionComment("comment")
+                    .addExtensionFields(
+                        MessageFieldSpec.builder(FieldType.STRING, "test", 1),
+                        MessageFieldSpec.builder(FieldType.BOOL, "bar", 2)
+                            .setFieldComment("comment"))
+                    .build());
   }
 
   @Test
@@ -54,8 +57,8 @@ public final class ExtensionSpecTest {
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("complex fields not allowed (eg: oneofs or maps)");
     ExtensionSpec.builder(OptionType.FILE)
-      .addExtensionFields(MapFieldSpec.builder(FieldType.BOOL, FieldType.BOOL, "test", 1))
-      .build();
+        .addExtensionFields(MapFieldSpec.builder(FieldType.BOOL, FieldType.BOOL, "test", 1))
+        .build();
   }
 
   @Test
@@ -63,19 +66,19 @@ public final class ExtensionSpecTest {
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("complex fields not allowed (eg: oneofs or maps)");
     ExtensionSpec.builder(OptionType.FILE)
-      .addExtensionFields(OneofFieldSpec.builder("test"))
-      .build();
+        .addExtensionFields(OneofFieldSpec.builder("test"))
+        .build();
   }
-
 
   @Test
   public void testEnsureFieldUniqueness() throws IOException {
     thrown.expect(IOException.class);
-    thrown.expectMessage("protopoet.UsageException: field name 'test' (number=1) not unique, used by field number 1");
+    thrown.expectMessage(
+        "protopoet.UsageException: field name 'test' (number=1) not unique, used by field number 1");
     ExtensionSpec.builder(OptionType.FILE)
-      .addExtensionFields(MessageFieldSpec.builder(FieldType.BOOL, "test", 1))
-      .addExtensionFields(MessageFieldSpec.builder(FieldType.BOOL, "test", 1))
-      .build()
-      .emit(ProtoWriter.dud());
+        .addExtensionFields(MessageFieldSpec.builder(FieldType.BOOL, "test", 1))
+        .addExtensionFields(MessageFieldSpec.builder(FieldType.BOOL, "test", 1))
+        .build()
+        .emit(ProtoWriter.dud());
   }
 }

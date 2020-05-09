@@ -16,9 +16,9 @@
 
 package protopoet;
 
-/** 
- * Declares an API for contributing imports from a type, such as extensions.
- * Checkout {@link ExtensionSpec} and {@link ProtoFile} for usages.
+/**
+ * Declares an API for contributing imports from a type, such as extensions. Checkout {@link
+ * ExtensionSpec} and {@link ProtoFile} for usages.
  */
 interface Importable {
   /** Returns an iterable of {@link ImportSpec} instances to be exported. */

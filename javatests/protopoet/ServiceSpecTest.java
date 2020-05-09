@@ -29,44 +29,43 @@ public final class ServiceSpecTest {
   @Test
   public void testWritingEmptyService() {
     output
-      .expects("service TestService {}\n")
-      .produce(() -> ServiceSpec.builder("TestService").build());
+        .expects("service TestService {}\n")
+        .produce(() -> ServiceSpec.builder("TestService").build());
   }
 
   @Test
   public void testWritingServiceComment() {
     output
-      .expects("// this is a test\nservice A {}\n")
-      .produce(() ->
-               ServiceSpec.builder("A")
-               .setServiceComment("this is a test")
-               .build());
+        .expects("// this is a test\nservice A {}\n")
+        .produce(() -> ServiceSpec.builder("A").setServiceComment("this is a test").build());
   }
 
   @Test
   public void testWritingRpcFields() {
     output
-      .expectsTestData()
-      .produce(() ->
-               ServiceSpec.builder("A")
-               .setServiceComment("comment")
-               .addRpcFields(RpcFieldSpec.builder("A")
-                             .setFieldComment("comment A")
-                             .setRequestMessageName("Req")
-                             .setResponseMessageName("Res"),
-                             RpcFieldSpec.builder("B")
-                             .setFieldComment("comment B")
-                             .setRequestMessageName("Req", true)
-                             .setResponseMessageName("Res"),
-                             RpcFieldSpec.builder("C")
-                             .setFieldComment("comment C")
-                             .setRequestMessageName("Req")
-                             .setResponseMessageName("Res", true),
-                             RpcFieldSpec.builder("D")
-                             .setFieldComment("comment D")
-                             .setRequestMessageName("Req", true)
-                             .setResponseMessageName("Res", true))
-               .build());
+        .expectsTestData()
+        .produce(
+            () ->
+                ServiceSpec.builder("A")
+                    .setServiceComment("comment")
+                    .addRpcFields(
+                        RpcFieldSpec.builder("A")
+                            .setFieldComment("comment A")
+                            .setRequestMessageName("Req")
+                            .setResponseMessageName("Res"),
+                        RpcFieldSpec.builder("B")
+                            .setFieldComment("comment B")
+                            .setRequestMessageName("Req", true)
+                            .setResponseMessageName("Res"),
+                        RpcFieldSpec.builder("C")
+                            .setFieldComment("comment C")
+                            .setRequestMessageName("Req")
+                            .setResponseMessageName("Res", true),
+                        RpcFieldSpec.builder("D")
+                            .setFieldComment("comment D")
+                            .setRequestMessageName("Req", true)
+                            .setResponseMessageName("Res", true))
+                    .build());
   }
 
   @Test
@@ -74,33 +73,36 @@ public final class ServiceSpecTest {
     thrown.expect(IOException.class);
     thrown.expectMessage("protopoet.UsageException: field name 'A' is not unique");
     ServiceSpec.builder("A")
-      .addRpcFields(RpcFieldSpec.builder("A").setRequestMessageName("Foo").setResponseMessageName("Bar"))
-      .addRpcFields(RpcFieldSpec.builder("A").setRequestMessageName("Foo").setResponseMessageName("Bar"))
-      .build()
-      .emit(ProtoWriter.dud());
+        .addRpcFields(
+            RpcFieldSpec.builder("A").setRequestMessageName("Foo").setResponseMessageName("Bar"))
+        .addRpcFields(
+            RpcFieldSpec.builder("A").setRequestMessageName("Foo").setResponseMessageName("Bar"))
+        .build()
+        .emit(ProtoWriter.dud());
   }
 
   @Test
   public void testWritingServiceOptions() {
     output
-      .expectsTestData()
-      .produce(() ->
-               ServiceSpec.builder("A")
-               .setServiceComment("comment")
-               .addServiceOptions(OptionSpec.builder(OptionType.SERVICE, "b")
-                                  .setOptionComment("comment")
-                                  .setValue(FieldType.DOUBLE, 0.2),
-                                  OptionSpec.builder(OptionType.SERVICE, "c")
-                                  .setOptionComment("comment")
-                                  .setValue(FieldType.FLOAT, 2f))
-               .build());
+        .expectsTestData()
+        .produce(
+            () ->
+                ServiceSpec.builder("A")
+                    .setServiceComment("comment")
+                    .addServiceOptions(
+                        OptionSpec.builder(OptionType.SERVICE, "b")
+                            .setOptionComment("comment")
+                            .setValue(FieldType.DOUBLE, 0.2),
+                        OptionSpec.builder(OptionType.SERVICE, "c")
+                            .setOptionComment("comment")
+                            .setValue(FieldType.FLOAT, 2f))
+                    .build());
   }
 
   @Test
   public void testEnsureOptionTypeEnforced() {
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("option must be service type");
-    ServiceSpec.builder("A")
-      .addServiceOptions(OptionSpec.builder(OptionType.MESSAGE, "b"));
+    ServiceSpec.builder("A").addServiceOptions(OptionSpec.builder(OptionType.MESSAGE, "b"));
   }
 }

@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableList;
 import java.io.IOException;
 
 /**
- * Defines an enum type for the Protocol Buffer language. Also see: {@link EnumFieldSpec}.
- * More info: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#enum_definition
+ * Defines an enum type for the Protocol Buffer language. Also see: {@link EnumFieldSpec}. More
+ * info: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#enum_definition
  */
 public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.Name {
 
@@ -35,12 +35,12 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
   }
 
   private final String enumName;
-  private final ImmutableList<String> enumComment;  
+  private final ImmutableList<String> enumComment;
   private final ImmutableList<EnumFieldSpec> enumFields;
   private final ImmutableList<ReservationSpec> reservations;
   private final ImmutableList<OptionSpec> options;
-  private final UsedFieldMonitor usedFieldMonitor = new UsedFieldMonitor();  
-  
+  private final UsedFieldMonitor usedFieldMonitor = new UsedFieldMonitor();
+
   private EnumSpec(Builder builder) {
     enumName = builder.enumName;
     enumComment = ImmutableList.copyOf(builder.enumComment);
@@ -48,7 +48,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
     reservations = ImmutableList.copyOf(builder.reservations);
     options = ImmutableList.copyOf(builder.options);
   }
-  
+
   @Override
   public void emit(ProtoWriter writer) throws IOException {
     usedFieldMonitor.reset();
@@ -59,9 +59,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
 
     // Options are hoisted to the very top of the enum for clarity/consistency.
     if (!options.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (OptionSpec option : options) {
         option.emit(writer);
       }
@@ -71,9 +69,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
     // Reservations are hoisted to the top as well, and added to the UsedFieldMonitor
     // first so we can track if the following src blocks accidentally use them.
     if (!reservations.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (ReservationSpec reservation : reservations) {
         try {
           usedFieldMonitor.add(reservation);
@@ -88,9 +84,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
     // Finally, writes all the known enum fields into the enun,
     // tracking used fields from being reused.
     if (!enumFields.isEmpty()) {
-      writer
-        .emit("\n")
-        .indent();
+      writer.emit("\n").indent();
       for (EnumFieldSpec enumField : enumFields) {
         try {
           usedFieldMonitor.add(enumField);
@@ -122,7 +116,7 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
     private ImmutableList<EnumFieldSpec> enumFields = ImmutableList.of();
     private ImmutableList<ReservationSpec> reservations = ImmutableList.of();
     private ImmutableList<OptionSpec> options = ImmutableList.of();
-    
+
     private Builder(String enumName) {
       this.enumName = enumName;
     }
@@ -140,10 +134,11 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
 
     /** Adds fields to the enum. See {@link EnumFieldSpec}. */
     public Builder addEnumFields(Iterable<? extends Buildable<EnumFieldSpec>> fields) {
-      enumFields = ImmutableList.<EnumFieldSpec>builder()
-        .addAll(enumFields)
-        .addAll(Buildables.buildAll(fields))
-        .build();
+      enumFields =
+          ImmutableList.<EnumFieldSpec>builder()
+              .addAll(enumFields)
+              .addAll(Buildables.buildAll(fields))
+              .build();
       return this;
     }
 
@@ -155,10 +150,11 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
 
     /** Adds field reservations for the enum, see {@link ReservationSpec}. */
     public Builder addReservations(Iterable<Buildable<ReservationSpec>> resos) {
-      reservations = ImmutableList.<ReservationSpec>builder()
-        .addAll(reservations)
-        .addAll(Buildables.buildAll(resos))
-        .build();
+      reservations =
+          ImmutableList.<ReservationSpec>builder()
+              .addAll(reservations)
+              .addAll(Buildables.buildAll(resos))
+              .build();
       return this;
     }
 
@@ -169,12 +165,16 @@ public final class EnumSpec implements Emittable, Buildable<EnumSpec>, Useable.N
 
     /** Adds options to the enum. See {@link OptionSpec}. */
     public Builder addEnumOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.ENUM,
-                                                     "option must be enum type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.ENUM, "option must be enum type")))
+              .build();
       return this;
     }
 

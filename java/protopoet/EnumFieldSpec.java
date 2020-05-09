@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * Defines a field for use with {@link EnumSpec}.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#enum_definition
+ * Defines a field for use with {@link EnumSpec}. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#enum_definition
  */
 public final class EnumFieldSpec implements Emittable, Useable.Field, Buildable<EnumFieldSpec> {
 
@@ -40,7 +40,7 @@ public final class EnumFieldSpec implements Emittable, Useable.Field, Buildable<
   private final int fieldNumber;
   private final ImmutableList<String> fieldComment;
   private final ImmutableList<OptionSpec> options;
-  
+
   private EnumFieldSpec(Builder builder) {
     fieldName = builder.fieldName;
     fieldNumber = builder.fieldNumber;
@@ -79,7 +79,7 @@ public final class EnumFieldSpec implements Emittable, Useable.Field, Buildable<
     private final int fieldNumber;
     private ImmutableList<String> fieldComment = ImmutableList.of();
     private ImmutableList<OptionSpec> options = ImmutableList.of();
-    
+
     private Builder(String fieldName, int fieldNumber) {
       this.fieldName = fieldName;
       this.fieldNumber = fieldNumber;
@@ -98,12 +98,17 @@ public final class EnumFieldSpec implements Emittable, Useable.Field, Buildable<
 
     /** Adds options to the field. See {@link OptionSpec}. */
     public Builder addFieldOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.ENUM_VALUE,
-                                                        "option must be enum value type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.ENUM_VALUE,
+                              "option must be enum value type")))
+              .build();
       return this;
     }
 

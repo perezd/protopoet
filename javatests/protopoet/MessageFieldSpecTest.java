@@ -29,70 +29,73 @@ public final class MessageFieldSpecTest {
   @Test
   public void testBasicField() {
     output
-      .expects("// comment\nsfixed32 test = 1;\n")
-      .produce(() ->
-               MessageFieldSpec.builder(FieldType.SFIXED32, "test", 1)
-               .setFieldComment("comment")
-               .build());
+        .expects("// comment\nsfixed32 test = 1;\n")
+        .produce(
+            () ->
+                MessageFieldSpec.builder(FieldType.SFIXED32, "test", 1)
+                    .setFieldComment("comment")
+                    .build());
   }
 
   @Test
   public void testRepeatedField() {
     output
-      .expects("// comment\nrepeated bool test = 1;\n")
-      .produce(() ->
-               MessageFieldSpec.builder(FieldType.BOOL, "test", 1)
-               .setFieldComment("comment")
-               .setRepeated(true)
-               .build());
+        .expects("// comment\nrepeated bool test = 1;\n")
+        .produce(
+            () ->
+                MessageFieldSpec.builder(FieldType.BOOL, "test", 1)
+                    .setFieldComment("comment")
+                    .setRepeated(true)
+                    .build());
   }
 
   @Test
   public void testCustomTypeNameFieldMessage() {
     output
-      .expects("// comment\nrepeated Foo test = 1;\n")
-      .produce(() ->
-               MessageFieldSpec.builder(FieldType.MESSAGE, "test", 1)
-               .setFieldComment("comment")
-               .setRepeated(true)
-               .setCustomTypeName("Foo")
-               .build());
+        .expects("// comment\nrepeated Foo test = 1;\n")
+        .produce(
+            () ->
+                MessageFieldSpec.builder(FieldType.MESSAGE, "test", 1)
+                    .setFieldComment("comment")
+                    .setRepeated(true)
+                    .setCustomTypeName("Foo")
+                    .build());
   }
 
   @Test
   public void testCustomTypeNameFieldEnum() {
     output
-      .expects("// comment\nrepeated Foo test = 1;\n")
-      .produce(() ->
-               MessageFieldSpec.builder(FieldType.ENUM, "test", 1)
-               .setFieldComment("comment")
-               .setRepeated(true)
-               .setCustomTypeName("Foo")
-               .build());
+        .expects("// comment\nrepeated Foo test = 1;\n")
+        .produce(
+            () ->
+                MessageFieldSpec.builder(FieldType.ENUM, "test", 1)
+                    .setFieldComment("comment")
+                    .setRepeated(true)
+                    .setCustomTypeName("Foo")
+                    .build());
   }
- 
+
   @Test
   public void testExceptionCustomTypeNameUsage() throws IOException {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("custom type names only supported for MESSAGE and ENUM types");
     MessageFieldSpec.builder(FieldType.DOUBLE, "test", 1)
-      .setCustomTypeName("Foo")
-      .build()
-      .emit(ProtoWriter.dud());    
-
+        .setCustomTypeName("Foo")
+        .build()
+        .emit(ProtoWriter.dud());
   }
 
   @Test
   public void testFieldOptions() {
     output
-      .expects("// comment\nstring name = 1 [(foo) = true, (bar) = 56];\n")
-      .produce(() ->
-               MessageFieldSpec.builder(FieldType.STRING, "name", 1)
-               .setFieldComment("comment")
-               .addFieldOptions(OptionSpec.builder(OptionType.FIELD, "foo")
-                                .setValue(FieldType.BOOL, true),
-                                OptionSpec.builder(OptionType.FIELD, "bar")
-                                .setValue(FieldType.INT32, 56))
-               .build());
+        .expects("// comment\nstring name = 1 [(foo) = true, (bar) = 56];\n")
+        .produce(
+            () ->
+                MessageFieldSpec.builder(FieldType.STRING, "name", 1)
+                    .setFieldComment("comment")
+                    .addFieldOptions(
+                        OptionSpec.builder(OptionType.FIELD, "foo").setValue(FieldType.BOOL, true),
+                        OptionSpec.builder(OptionType.FIELD, "bar").setValue(FieldType.INT32, 56))
+                    .build());
   }
 }

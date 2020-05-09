@@ -16,35 +16,33 @@
 
 package protopoet;
 
-import java.io.IOException;
 import org.junit.Rule;
 import org.junit.Test;
 
 public final class EnumFieldSpecTest {
-  
+
   @Rule public final ExpectedOutput output = ExpectedOutput.none();
 
   @Test
   public void testWritingField() {
     output
-      .expects("// hello there\nFOO = 1;\n")
-      .produce(() ->
-               EnumFieldSpec.builder("FOO", 1)
-               .setFieldComment("hello there")
-               .build());
+        .expects("// hello there\nFOO = 1;\n")
+        .produce(() -> EnumFieldSpec.builder("FOO", 1).setFieldComment("hello there").build());
   }
 
   @Test
   public void testFieldOptions() {
     output
-      .expects("// comment\nFOO = 1 [(foo) = true, (bar) = 56];\n")
-      .produce(() ->
-               EnumFieldSpec.builder("FOO", 1)
-               .setFieldComment("comment")
-               .addFieldOptions(OptionSpec.builder(OptionType.ENUM_VALUE, "foo")
-                                .setValue(FieldType.BOOL, true),
-                                OptionSpec.builder(OptionType.ENUM_VALUE, "bar")
-                                .setValue(FieldType.INT32, 56))
-               .build());
+        .expects("// comment\nFOO = 1 [(foo) = true, (bar) = 56];\n")
+        .produce(
+            () ->
+                EnumFieldSpec.builder("FOO", 1)
+                    .setFieldComment("comment")
+                    .addFieldOptions(
+                        OptionSpec.builder(OptionType.ENUM_VALUE, "foo")
+                            .setValue(FieldType.BOOL, true),
+                        OptionSpec.builder(OptionType.ENUM_VALUE, "bar")
+                            .setValue(FieldType.INT32, 56))
+                    .build());
   }
 }

@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.io.IOException;
 import java.util.Arrays;
 
-/** 
+/**
  * This class largely inspired by JavaPoet's CodeWriter class:
  * https://github.com/square/javapoet/blob/master/src/main/java/com/squareup/javapoet/CodeWriter.java
  */
@@ -30,11 +30,23 @@ final class ProtoWriter {
 
   /** Useful for tests where we don't care about output. */
   static ProtoWriter dud() {
-    Appendable devNull = new Appendable() {
-        @Override public Appendable append(char c) { return this; }
-        @Override public Appendable append(CharSequence c) { return this; }
-        @Override public Appendable append(CharSequence c, int s, int e) { return this; }
-      };
+    Appendable devNull =
+        new Appendable() {
+          @Override
+          public Appendable append(char c) {
+            return this;
+          }
+
+          @Override
+          public Appendable append(CharSequence c) {
+            return this;
+          }
+
+          @Override
+          public Appendable append(CharSequence c, int s, int e) {
+            return this;
+          }
+        };
     return new ProtoWriter(devNull, " ", 80, 2);
   }
 
@@ -52,11 +64,11 @@ final class ProtoWriter {
    * is -1 when the currently-written line isn't part of a statement.
    */
   private int statementLine = -1;
-  
+
   ProtoWriter(Appendable out) {
     this(out, " ", 80, 2);
   }
-  
+
   ProtoWriter(Appendable out, String indentValue, int lineLength, int indentSize) {
     this.out = new LineWrapper(out, indentValue, lineLength);
     this.indentValue = indentValue;
@@ -78,7 +90,8 @@ final class ProtoWriter {
   }
 
   ProtoWriter unindent(int levels) {
-    checkArgument(this.indentLevel - levels >= 0, "cannot unindent %s from %s", levels, indentLevel);
+    checkArgument(
+        this.indentLevel - levels >= 0, "cannot unindent %s from %s", levels, indentLevel);
     this.indentLevel -= levels;
     return this;
   }
@@ -98,9 +111,9 @@ final class ProtoWriter {
         this.comment = false;
       }
     }
-    return this;    
+    return this;
   }
-  
+
   ProtoWriter emit(String s) throws IOException {
     boolean first = true;
     for (String line : s.split("\n", -1)) {

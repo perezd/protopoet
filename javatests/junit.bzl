@@ -41,9 +41,12 @@ def _AsClassName(fname):
 
 def _impl(ctx):
     classes = ",".join(
-        [_AsClassName(x) for x in ctx.attr.srcs])
-    ctx.actions.write(output=ctx.outputs.out, content=_OUTPUT % (
-            classes, ctx.attr.outname))
+        [_AsClassName(x) for x in ctx.attr.srcs],
+    )
+    ctx.actions.write(output = ctx.outputs.out, content = _OUTPUT % (
+        classes,
+        ctx.attr.outname,
+    ))
 
 _GenSuite = rule(
     attrs = {
@@ -56,10 +59,14 @@ _GenSuite = rule(
 
 def junit_tests(name, srcs, **kwargs):
     s_name = name.replace("-", "_") + "TestSuite"
-    _GenSuite(name = s_name,
-              srcs = srcs,
-              outname = s_name)
-    native.java_test(name = name,
-                     test_class = s_name,
-                     srcs = srcs + [":"+s_name],
-                     **kwargs)
+    _GenSuite(
+        name = s_name,
+        srcs = srcs,
+        outname = s_name,
+    )
+    native.java_test(
+        name = name,
+        test_class = s_name,
+        srcs = srcs + [":" + s_name],
+        **kwargs
+    )

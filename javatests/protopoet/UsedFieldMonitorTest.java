@@ -32,12 +32,12 @@ public final class UsedFieldMonitorTest {
   @Rule public final ExpectedException thrown = ExpectedException.none();
 
   private UsedFieldMonitor monitor;
-  
+
   @Before
   public void setUp() {
     monitor = new UsedFieldMonitor();
   }
-  
+
   @Test
   public void testEmptyUnused() throws UsageException {
     // Should not throw.
@@ -65,17 +65,18 @@ public final class UsedFieldMonitorTest {
   public void testExceptionFieldNumberReservations() throws UsageException {
     thrown.expect(UsageException.class);
     thrown.expectMessage("field number 1 is reserved and cannot be used");
-    Useable.FieldReservations reservations = new Useable.FieldReservations() {
-        @Override
-        public IntStream asFieldNumberStream() {
-          return IntStream.of(1,4,5);
-        }
+    Useable.FieldReservations reservations =
+        new Useable.FieldReservations() {
+          @Override
+          public IntStream asFieldNumberStream() {
+            return IntStream.of(1, 4, 5);
+          }
 
-        @Override
-        public Stream<String> asFieldNameStream() {
-          return Stream.of();
-        }
-      };
+          @Override
+          public Stream<String> asFieldNameStream() {
+            return Stream.of();
+          }
+        };
     monitor.add(reservations);
     monitor.ensureUnused(new FakeField("a", 1));
   }
@@ -84,17 +85,18 @@ public final class UsedFieldMonitorTest {
   public void testExceptionFieldNameReservations() throws UsageException {
     thrown.expect(UsageException.class);
     thrown.expectMessage("field name 'a' is reserved and cannot be used");
-    Useable.FieldReservations reservations = new Useable.FieldReservations() {
-        @Override
-        public IntStream asFieldNumberStream() {
-          return IntStream.of();
-        }
+    Useable.FieldReservations reservations =
+        new Useable.FieldReservations() {
+          @Override
+          public IntStream asFieldNumberStream() {
+            return IntStream.of();
+          }
 
-        @Override
-        public Stream<String> asFieldNameStream() {
-          return Stream.of("a");
-        }
-      };
+          @Override
+          public Stream<String> asFieldNameStream() {
+            return Stream.of("a");
+          }
+        };
     monitor.add(reservations);
     monitor.ensureUnused(new FakeField("a", 1));
   }
@@ -110,17 +112,18 @@ public final class UsedFieldMonitorTest {
   public void testUseableFieldsFieldNameReserved() throws UsageException {
     thrown.expect(UsageException.class);
     thrown.expectMessage("field name 'test' is not unique");
-    monitor.add(new Useable.Fields() {
-        @Override
-        public String fieldName() {
-          return "test";
-        }
+    monitor.add(
+        new Useable.Fields() {
+          @Override
+          public String fieldName() {
+            return "test";
+          }
 
-        @Override
-        public Iterable<Useable.Field> fields() {
-          return Collections.EMPTY_LIST;
-        }
-      });
+          @Override
+          public Iterable<Useable.Field> fields() {
+            return Collections.EMPTY_LIST;
+          }
+        });
     monitor.add(new FakeField("test", 2));
   }
 
@@ -129,12 +132,12 @@ public final class UsedFieldMonitorTest {
 
     private final String fieldName;
     private final int fieldNumber;
-    
+
     FakeField(String fieldName, int fieldNumber) {
       this.fieldName = fieldName;
       this.fieldNumber = fieldNumber;
     }
-    
+
     @Override
     public String fieldName() {
       return fieldName;

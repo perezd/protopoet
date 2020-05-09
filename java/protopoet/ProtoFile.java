@@ -27,8 +27,8 @@ import java.util.Collection;
 import java.util.Comparator;
 
 /**
- * Models a Proto file using proto3 syntax.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#proto_file
+ * Models a Proto file using proto3 syntax. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#proto_file
  */
 public final class ProtoFile implements Emittable {
 
@@ -36,7 +36,7 @@ public final class ProtoFile implements Emittable {
   public static Builder builder() {
     return new Builder();
   }
-  
+
   private final String packageName;
   private final ImmutableList<String> fileComment;
   private final ImmutableList<ImmutableList<Emittable>> srcBlocks;
@@ -87,42 +87,39 @@ public final class ProtoFile implements Emittable {
     if (!fileComment.isEmpty()) {
       writer.emitComment(fileComment);
     }
-    
+
     // ProtoPoet only supports proto3, so we hard code this.
-    writer
-      .emit("syntax = \"proto3\";")
-      .emit("\n");
+    writer.emit("syntax = \"proto3\";").emit("\n");
 
     // Packages are optional.
     if (packageName != null) {
-      writer
-        .emit("\n")
-        .emit(String.format("package %s;", packageName))
-        .emit("\n");
+      writer.emit("\n").emit(String.format("package %s;", packageName)).emit("\n");
     }
 
     // Capture all unique implicit imports based on the provided src blocks.
-    Iterable<ImportSpec> implicitImports = srcBlocks.stream()
-      .flatMap(Collection::stream)
-      .filter(b -> b instanceof Importable)
-      .map(b -> ((Importable) b).imports())
-      .flatMap(Streams::stream)
-      .distinct()
-      .collect(ImmutableList.toImmutableList());
-    
+    Iterable<ImportSpec> implicitImports =
+        srcBlocks.stream()
+            .flatMap(Collection::stream)
+            .filter(b -> b instanceof Importable)
+            .map(b -> ((Importable) b).imports())
+            .flatMap(Streams::stream)
+            .distinct()
+            .collect(ImmutableList.toImmutableList());
+
     // Ensure that we have a sorted unique set of all imports to hoist
     // to the top of our file.
-    ImmutableList<ImportSpec> uniqueSortedImports = ImmutableList
-              .sortedCopyOf(Comparator.comparing(ImportSpec::path),
-                            ImmutableSet.<ImportSpec>builder()
-                            .addAll(explicitImports)
-                            .addAll(implicitImports)
-                            .build()
-                            .asList());
+    ImmutableList<ImportSpec> uniqueSortedImports =
+        ImmutableList.sortedCopyOf(
+            Comparator.comparing(ImportSpec::path),
+            ImmutableSet.<ImportSpec>builder()
+                .addAll(explicitImports)
+                .addAll(implicitImports)
+                .build()
+                .asList());
 
     // Hoist all imports to the top of the file.
     if (!uniqueSortedImports.isEmpty()) {
-      writer.emit("\n");      
+      writer.emit("\n");
       for (ImportSpec impt : uniqueSortedImports) {
         impt.emit(writer);
       }
@@ -183,10 +180,11 @@ public final class ProtoFile implements Emittable {
 
     /** Declares a list of imports for the proto file. See {@link ImportSpec}. */
     public Builder addImports(Iterable<? extends Buildable<ImportSpec>> impts) {
-      imports = ImmutableList.<ImportSpec>builder()
-        .addAll(imports)
-        .addAll(ImmutableList.copyOf(Buildables.buildAll(impts)))
-        .build();
+      imports =
+          ImmutableList.<ImportSpec>builder()
+              .addAll(imports)
+              .addAll(ImmutableList.copyOf(Buildables.buildAll(impts)))
+              .build();
       return this;
     }
 
@@ -198,10 +196,11 @@ public final class ProtoFile implements Emittable {
 
     /** Declares a list of top level messages for the proto file. See {@link MessageSpec}. */
     public Builder addMessages(Iterable<? extends Buildable<MessageSpec>> msgs) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(msgs)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(msgs)))
+              .build();
       return this;
     }
 
@@ -212,10 +211,11 @@ public final class ProtoFile implements Emittable {
 
     /** Declares a list of top level eums for the proto file. See {@link EnumSpec}. */
     public Builder addEnums(Iterable<? extends Buildable<EnumSpec>> enums) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(enums)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(enums)))
+              .build();
       return this;
     }
 
@@ -226,14 +226,14 @@ public final class ProtoFile implements Emittable {
 
     /** Declares a list of top level extensions for the proto file. See {@link ExtensionSpec}. */
     public Builder addExtensions(Iterable<? extends Buildable<ExtensionSpec>> extensions) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(extensions)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(extensions)))
+              .build();
       return this;
-
     }
-    
+
     /** Declares a list of top level extensions for the proto file. See {@link ExtensionSpec}. */
     public Builder addExtensions(Buildable<ExtensionSpec>... extensions) {
       return addExtensions(ImmutableList.copyOf(extensions));
@@ -241,10 +241,11 @@ public final class ProtoFile implements Emittable {
 
     /** Declares a list of top level services for the proto file. See {@link ServiceSpec}. */
     public Builder addServices(Iterable<? extends Buildable<ServiceSpec>> services) {
-      srcBlocks = ImmutableList.<ImmutableList<Emittable>>builder()
-        .addAll(srcBlocks)
-        .add(ImmutableList.copyOf(Buildables.buildAll(services)))
-        .build();
+      srcBlocks =
+          ImmutableList.<ImmutableList<Emittable>>builder()
+              .addAll(srcBlocks)
+              .add(ImmutableList.copyOf(Buildables.buildAll(services)))
+              .build();
       return this;
     }
 
@@ -255,12 +256,16 @@ public final class ProtoFile implements Emittable {
 
     /** Adds options to the file. See {@link OptionSpec}. */
     public Builder addFileOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.FILE,
-                                                        "option must be file type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.FILE, "option must be file type")))
+              .build();
       return this;
     }
 

@@ -32,7 +32,7 @@ public final class ProtoWriterTest {
     this.out = new StringBuilder();
     this.protoWriter = new ProtoWriter(out, " ", 5, 2);
   }
-  
+
   @Test
   public void testWritingCommentsVariadic() throws IOException {
     protoWriter.emitComment("this", "is a test");
