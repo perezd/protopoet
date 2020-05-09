@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * Defines a field for use with {@link MessageSpec}.
- * Learn more: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#message_definition
+ * Defines a field for use with {@link MessageSpec}. Learn more:
+ * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#message_definition
  */
 public final class MessageFieldSpec implements MessageField, Useable.Field {
 
@@ -45,6 +45,13 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
     return builder;
   }
 
+  /** Shortcut builder for an optional {@link MessageFieldSpec}. */
+  public static Builder optional(FieldType fieldType, String fieldName, int fieldNumber) {
+    Builder builder = builder(fieldType, fieldName, fieldNumber);
+    builder.setOptional(true);
+    return builder;
+  }
+
   /** Shortcut builder for a message-typed {@link MessageFieldSpec}. */
   public static Builder message(String typeName, String fieldName, int fieldNumber) {
     Builder builder = builder(FieldType.MESSAGE, fieldName, fieldNumber);
@@ -57,15 +64,17 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
   private final int fieldNumber;
   private final ImmutableList<String> fieldComment;
   private final boolean isRepeated;
+  private final boolean isOptional;
   private final String customTypeName;
   private final ImmutableList<OptionSpec> options;
-  
+
   private MessageFieldSpec(Builder builder) {
     fieldType = builder.fieldType;
     fieldName = builder.fieldName;
     fieldNumber = builder.fieldNumber;
     fieldComment = ImmutableList.copyOf(builder.fieldComment);
     isRepeated = builder.isRepeated;
+    isOptional = builder.isOptional;
     customTypeName = builder.customTypeName;
     options = ImmutableList.copyOf(builder.options);
   }
@@ -80,16 +89,22 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
     // explicit type name.
     String actualFieldType = fieldType.toString();
     if (fieldType == FieldType.ENUM || fieldType == FieldType.MESSAGE) {
-      checkNotNull(customTypeName,
-                   String.format("'%s' type is %s and needs a custom type name associated with it",
-                                 fieldName, fieldType));
+      checkNotNull(
+          customTypeName,
+          String.format(
+              "'%s' type is %s and needs a custom type name associated with it",
+              fieldName, fieldType));
       actualFieldType = customTypeName;
     }
-    writer.emit(String.format("%s%s %s = %d",
-                              isRepeated ? "repeated " : "",
-                              actualFieldType,
-                              fieldName,
-                              fieldNumber));
+
+    String prefix = "";
+    if (isRepeated) {
+      prefix = "repeated ";
+    } else if (isOptional) {
+      prefix = "optional ";
+    }
+
+    writer.emit(String.format("%s%s %s = %d", prefix, actualFieldType, fieldName, fieldNumber));
     OptionSpec.emitFieldOptions(options, writer).emit(";\n");
   }
 
@@ -120,6 +135,7 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
     private final int fieldNumber;
     private ImmutableList<String> fieldComment = ImmutableList.of();
     private boolean isRepeated;
+    private boolean isOptional;
     private String customTypeName = null;
     private ImmutableList<OptionSpec> options = ImmutableList.of();
 
@@ -142,6 +158,7 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
 
     /** Designates whether or not a field should be identified as repeatable. */
     public Builder setRepeated(boolean isRepeated) {
+      checkState(!isOptional, "optional fields cannot be repeated");
       this.isRepeated = isRepeated;
       return this;
     }
@@ -149,20 +166,25 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
     /** Declares a custom type name. For use when field is type is a Message or Enum. */
     public Builder setCustomTypeName(String customTypeName) {
       checkNotNull(customTypeName, "custom type name may not be null");
-      checkState(fieldType == FieldType.MESSAGE || fieldType == FieldType.ENUM,
-                 "custom type names only supported for MESSAGE and ENUM types");
+      checkState(
+          fieldType == FieldType.MESSAGE || fieldType == FieldType.ENUM,
+          "custom type names only supported for MESSAGE and ENUM types");
       this.customTypeName = customTypeName;
       return this;
     }
 
     /** Adds options to the field. See {@link OptionSpec}. */
     public Builder addFieldOptions(Iterable<? extends Buildable<OptionSpec>> options) {
-      this.options = ImmutableList.<OptionSpec>builder()
-        .addAll(this.options)
-        .addAll(Buildables.buildAll(options,
-                                   opt -> checkArgument(opt.optionType() == OptionType.FIELD,
-                                                        "option must be field type")))
-        .build();
+      this.options =
+          ImmutableList.<OptionSpec>builder()
+              .addAll(this.options)
+              .addAll(
+                  Buildables.buildAll(
+                      options,
+                      opt ->
+                          checkArgument(
+                              opt.optionType() == OptionType.FIELD, "option must be field type")))
+              .build();
       return this;
     }
 
@@ -172,10 +194,20 @@ public final class MessageFieldSpec implements MessageField, Useable.Field {
       return addFieldOptions(ImmutableList.copyOf(options));
     }
 
+    /**
+     * Designates whether or not a field should track explicit presence. Learn more about usage:
+     * https://github.com/protocolbuffers/protobuf/blob/master/docs/field_presence.md
+     */
+    public Builder setOptional(boolean isOptional) {
+      checkState(!isRepeated, "repeated fields cannot be explicitly optional");
+      this.isOptional = isOptional;
+      return this;
+    }
+
     /** Builds a new instance of {@link MessageFieldSpec}. */
     @Override
     public MessageField build() {
       return new MessageFieldSpec(this);
-    }    
+    }
   }
 }

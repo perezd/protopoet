@@ -98,4 +98,35 @@ public final class MessageFieldSpecTest {
                         OptionSpec.builder(OptionType.FIELD, "bar").setValue(FieldType.INT32, 56))
                     .build());
   }
+
+  @Test
+  public void testOptionalField() {
+    output
+        .expects("// comment\noptional bool test = 1;\n")
+        .produce(
+            () ->
+                MessageFieldSpec.optional(FieldType.BOOL, "test", 1)
+                    .setFieldComment("comment")
+                    .build());
+  }
+
+  @Test
+  public void testExceptionForOptionalRepeatedField() throws IOException {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("repeated fields cannot be explicitly optional");
+    MessageFieldSpec.repeated(FieldType.DOUBLE, "test", 1)
+        .setOptional(true)
+        .build()
+        .emit(ProtoWriter.dud());
+  }
+
+  @Test
+  public void testExceptionForRepeatedOptionalField() throws IOException {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("optional fields cannot be repeated");
+    MessageFieldSpec.optional(FieldType.DOUBLE, "test", 1)
+        .setRepeated(true)
+        .build()
+        .emit(ProtoWriter.dud());
+  }
 }
