@@ -1,3 +1,5 @@
+load("@google_bazel_common//tools/javadoc:javadoc.bzl", "javadoc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 java_library(
@@ -74,5 +76,15 @@ java_library(
         ":libproto_writer.jar",
         ":libusage_monitor.jar",
         ":libline_wrapper.jar",
+    ],
+)
+
+javadoc_library(
+    name = "docs",
+    srcs = glob(["*.java"]),
+    root_packages = ["protopoet"],
+    deps = [
+        ":release",
+        "@google_bazel_common//third_party/java/guava",
     ],
 )
