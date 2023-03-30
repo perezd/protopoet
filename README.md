@@ -1,6 +1,8 @@
 ProtoPoet
 =========
 
+![tests](https://github.com/perezd/protopoet/actions/workflows/tests.yml/badge.svg)
+
 `ProtoPoet` is a Java API for generating [Protocol Buffer](https://developers.google.com/protocol-buffers/) (`.proto`) source files. This library was inspired by the fantastic [JavaPoet](https://github.com/square/javapoet) project by Square.
 
 > NOTE: ProtoPoet 1.0 only supports `proto3` syntax. If you have a need for `proto2` syntax support, please file an issue and/or submit a PR for it.

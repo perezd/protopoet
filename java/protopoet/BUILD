@@ -1,4 +1,4 @@
-load("@rules_jvm_external//:defs.bzl", "javadoc")
+load("@rules_jvm_external//:defs.bzl", "javadoc", "java_export")
 
 package(default_visibility = ["//javatests/protopoet:__pkg__"])
 
@@ -8,11 +8,16 @@ javadoc(
 )
 
 genrule(
-    name = "docs",
+    name = "docs_html",
     srcs = [":docs_jar"],
-    outs = ["html"],
+    outs = ["docs"],
     cmd = "unzip -d $@ $<",
-    visibility = ["//visibility:public"],
+)
+
+java_export(
+    name = "release",
+    maven_coordinates = "perez.earth:protopoet:1.5.0",
+    runtime_deps = [":protopoet"],
 )
 
 java_library(
