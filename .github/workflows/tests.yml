@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Test
+        uses: ngalaiko/bazel-action@ad5c8499ac2945bb7cc56587ed9da4a96b4fbb84
+        with:
+          args: build //...
+      - name: Unit Tests
+        uses: ngalaiko/bazel-action@ad5c8499ac2945bb7cc56587ed9da4a96b4fbb84
+        with:
+          args: test //...
+
