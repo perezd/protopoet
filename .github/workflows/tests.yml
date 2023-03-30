@@ -27,7 +27,7 @@ jobs:
 
     - name: Test
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" test //...
+        "${GITHUB_WORKSPACE}/bin/bazel" test //... -//java/protopoet:release
 
     - name: Build
       run: |
