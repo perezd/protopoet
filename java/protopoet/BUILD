@@ -67,18 +67,6 @@ java_library(
     ],
 )
 
-# This target is used to create a combined jar of all the necessary
-# subcomponents of protopoet.
-java_library(
-    name = "release",
-    resource_jars = [
-        ":libprotopoet.jar",
-        ":libproto_writer.jar",
-        ":libusage_monitor.jar",
-        ":libline_wrapper.jar",
-    ],
-)
-
 javadoc_library(
     name = "docs",
     srcs = glob(["*.java"]),
