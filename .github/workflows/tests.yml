@@ -31,4 +31,4 @@ jobs:
 
     - name: Build
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" build //...
+        "${GITHUB_WORKSPACE}/bin/bazel" build //... -//java/protopoet:release
