@@ -10,7 +10,7 @@ javadoc(
 genrule(
     name = "docs",
     srcs = [":docs_jar"],
-    outs = ["docs_html.zip"],
+    outs = ["html"],
     cmd = "unzip -d $@ $<",
     visibility = ["//visibility:public"],
 )
