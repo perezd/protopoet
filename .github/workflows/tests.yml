@@ -6,15 +6,29 @@ on:
       - master
 
 jobs:
-  Tests:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Build Test
-        uses: ngalaiko/bazel-action@ad5c8499ac2945bb7cc56587ed9da4a96b4fbb84
-        with:
-          args: bazel build //...
-      - name: Unit Tests
-        uses: ngalaiko/bazel-action@ad5c8499ac2945bb7cc56587ed9da4a96b4fbb84
-        with:
-          args: bazel test //...
+    - uses: actions/checkout@v1
 
+    - name: Mount bazel cache
+      uses: actions/cache@v1
+      with:
+        path: "/home/runner/.cache/bazel"
+        key: bazel
+
+    - name: Install bazelisk
+      run: |
+        curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.1.0/bazelisk-linux-amd64"
+        mkdir -p "${GITHUB_WORKSPACE}/bin/"
+        mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
+        chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
+
+    - name: Test
+      run: |
+        "${GITHUB_WORKSPACE}/bin/bazel" test //...
+
+    - name: Build
+      run: |
+        "${GITHUB_WORKSPACE}/bin/bazel" build //...
