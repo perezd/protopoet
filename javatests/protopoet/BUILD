@@ -5,9 +5,9 @@ junit_tests(
     srcs = ["ProtoWriterTest.java"],
     deps = [
         "//java/protopoet:proto_writer",
-        "@google_bazel_common//third_party/java/guava",
-        "@google_bazel_common//third_party/java/junit",
-        "@google_bazel_common//third_party/java/truth",
+        "//:guava",
+        "//:junit",
+        "//:truth",
     ],
 )
 
@@ -19,9 +19,9 @@ junit_tests(
     ],
     deps = [
         "//java/protopoet:usage_monitor",
-        "@google_bazel_common//third_party/java/guava",
-        "@google_bazel_common//third_party/java/junit",
-        "@google_bazel_common//third_party/java/truth",
+        "//:guava",
+        "//:junit",
+        "//:truth",
     ],
 )
 
@@ -47,9 +47,9 @@ junit_tests(
         ":expected_output",
         "//java/protopoet",
         "//java/protopoet:proto_writer",
-        "@google_bazel_common//third_party/java/guava",
-        "@google_bazel_common//third_party/java/junit",
-        "@google_bazel_common//third_party/java/truth",
+        "//:guava",
+        "//:junit",
+        "//:truth",
     ],
 )
 
@@ -58,8 +58,8 @@ java_library(
     srcs = ["ExpectedOutput.java"],
     deps = [
         "//java/protopoet:proto_writer",
-        "@google_bazel_common//third_party/java/guava",
-        "@google_bazel_common//third_party/java/junit",
-        "@google_bazel_common//third_party/java/truth",
+        "//:guava",
+        "//:junit",
+        "//:truth",
     ],
 )

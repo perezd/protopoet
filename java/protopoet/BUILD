@@ -1,6 +1,19 @@
-load("@google_bazel_common//tools/javadoc:javadoc.bzl", "javadoc_library")
+load("@rules_jvm_external//:defs.bzl", "javadoc")
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//javatests/protopoet:__pkg__"])
+
+javadoc(
+    name = "docs_jar",
+    deps = [":protopoet"],
+)
+
+genrule(
+    name = "docs",
+    srcs = [":docs_jar"],
+    outs = ["docs_html.zip"],
+    cmd = "unzip -d $@ $<",
+    visibility = ["//visibility:public"],
+)
 
 java_library(
     name = "protopoet",
@@ -30,15 +43,16 @@ java_library(
     deps = [
         ":proto_writer",
         ":usage_monitor",
-        "@google_bazel_common//third_party/java/guava",
+        "//:guava",
     ],
+    visibility = ["//visibility:public"],
 )
 
 java_library(
     name = "line_wrapper",
     srcs = ["LineWrapper.java"],
     deps = [
-        "@google_bazel_common//third_party/java/guava",
+        "//:guava",
     ],
 )
 
@@ -51,7 +65,7 @@ java_library(
         "UsedNameMonitor.java",
     ],
     deps = [
-        "@google_bazel_common//third_party/java/guava",
+        "//:guava",
     ],
 )
 
@@ -63,16 +77,6 @@ java_library(
     ],
     deps = [
         ":line_wrapper",
-        "@google_bazel_common//third_party/java/guava",
-    ],
-)
-
-javadoc_library(
-    name = "docs",
-    srcs = glob(["*.java"]),
-    root_packages = ["protopoet"],
-    deps = [
-        ":release",
-        "@google_bazel_common//third_party/java/guava",
+        "//:guava",
     ],
 )

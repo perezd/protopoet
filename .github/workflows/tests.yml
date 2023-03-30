@@ -27,7 +27,7 @@ jobs:
 
     - name: Test
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" test //...
+        "${GITHUB_WORKSPACE}/bin/bazel" test --test_output=errors //javatests/...
 
     - name: Build
       run: |
